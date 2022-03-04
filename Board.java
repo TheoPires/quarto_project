@@ -1,7 +1,8 @@
 public class Board {
+    final int SIZE = 4;
     private Pieces[][] board;
 
-    public Board(int size) {
-        board = new Pieces[size][size];
+    public Board() {
+        board = new Pieces[SIZE][SIZE];
     }
 }
