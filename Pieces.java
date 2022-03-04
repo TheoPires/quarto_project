@@ -32,4 +32,20 @@ public enum Pieces {
 		this.hollow = hollow;
 		this.color = color;
 	}
+
+	public boolean isBig() {
+		return big;
+	}
+
+	public boolean isHollow() {
+		return hollow;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public String getForm() {
+		return form;
+	}
 }
