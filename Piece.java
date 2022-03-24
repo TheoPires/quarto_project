@@ -1,6 +1,6 @@
 import java.awt.Color;
 
-public enum Pieces {
+public enum Piece {
 	SMALL_SQUARE_HOLLOW_YELLOW(false, "SQUARE", true, Color.YELLOW),
 	SMALL_SQUARE_HOLLOW_BROWN(false, "SQUARE", true, new Color(102,51,0)),
 	SMALL_SQUARE_FIELD_YELLOW(false, "SQUARE", false, Color.YELLOW),
