@@ -26,7 +26,7 @@ public enum Piece {
 	private Color color;
 	private String form;
 
-	Pieces(boolean big, String form, boolean hollow, Color color) {
+	Piece(boolean big, String form, boolean hollow, Color color) {
 		this.big = big;
 		this.form = form;
 		this.hollow = hollow;
