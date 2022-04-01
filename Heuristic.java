@@ -44,7 +44,12 @@ public class Heuristic {
 
         for(Piece p : pieces) {
             if (p.haveOneCaracteristicsInCommun(testedPiece)) {
-
+                for(Piece piece : sameCarateristicsPiece){
+                    if(!p.haveOneCaracteristicsInCommun(piece)){
+                        return false;
+                    }
+                    sameCarateristicsPiece.add(piece);
+                }
             }
         }
         return false;
