@@ -48,4 +48,8 @@ public enum Piece {
 	public String getForm() {
 		return form;
 	}
+
+	public boolean haveOneCaracteristicsInCommun(Piece piece){
+		return false;
+	}
 }
