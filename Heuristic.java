@@ -22,7 +22,7 @@ public class Heuristic {
         return null;
     }
 
-    //x:row y:Column
+    //Peu être modifiable
     public int getOpenRowFromEmplacement(int row, Piece testedPiece) {
         int result = 0;
         for (int column = 0; column < board.getSIZE(); column++) {
