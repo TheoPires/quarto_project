@@ -18,8 +18,8 @@ public enum Piece {
 	
 	BIG_ROUND_HOLLOW_YELLOW(true, "ROUND", true, Color.YELLOW),
 	BIG_ROUND_HOLLOW_BROWN(true, "ROUND", true, new Color(102,51,0)),
-	BIG_ROUND_FIELD_YELLOW(true, "ROUND", true, Color.YELLOW),
-	BIG_ROUND_FIELD_BROWN(true, "ROUND", true, new Color(102,51,0));
+	BIG_ROUND_FIELD_YELLOW(true, "ROUND", false, Color.YELLOW),
+	BIG_ROUND_FIELD_BROWN(true, "ROUND", false, new Color(102,51,0));
 	
 	private boolean big;
 	private boolean hollow;

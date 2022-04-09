@@ -26,18 +26,19 @@ public class Heuristic {
     public int getOpenRowFromEmplacement(int row, Piece testedPiece) {
         int result = 0;
         for (int column = 0; column < board.getSIZE(); column++) {
+            System.out.println("row :"  + row + ", column :" + column);
             Piece piece = board.getPiece(row, column);
             if (piece != null) {
-                if (piece.isBig() && testedPiece.isBig()) {
+                if (piece.isBig() == testedPiece.isBig()) {
                     System.out.println("Big Equality");
-                    result += 1;
-                }
-                if (piece.isHollow() && testedPiece.isHollow()) {
-                    System.out.println("Hollow Equality");
                     result += 1;
                 }
                 if (piece.getForm().equals(testedPiece.getForm())) {
                     System.out.println("Form Equality");
+                    result += 1;
+                }
+                if (piece.isHollow() == testedPiece.isHollow()) {
+                    System.out.println("Hollow Equality");
                     result += 1;
                 }
                 if (piece.getColor().equals(testedPiece.getColor())) {
