@@ -12,7 +12,7 @@ public class Test {
             System.out.println("(" + couple.getFst()+","+ couple.getSnd()+")");
         }
 
-        Heuristic h = new Heuristic();
+        Heuristic h = new Heuristic(board);
 
         System.out.println(h.getOpenRowFromEmplacement(1, Piece.BIG_ROUND_FIELD_YELLOW));
 

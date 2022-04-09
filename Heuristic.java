@@ -4,7 +4,8 @@ import java.util.List;
 public class Heuristic {
 
     private Board board;
-    private Heuristic (Board board){
+
+    public  Heuristic (Board board){
         this.board = board;
     }
     public Heuristic(){
@@ -27,19 +28,25 @@ public class Heuristic {
         for (int column = 0; column < board.getSIZE(); column++) {
             Piece piece = board.getPiece(row, column);
             if (piece != null) {
-                System.out.println("ICI");
-                if (piece.isBig() == testedPiece.isBig()) {
+                if (piece.isBig() && testedPiece.isBig()) {
+                    System.out.println("Big Equality");
                     result += 1;
                 }
                 if (piece.isHollow() && testedPiece.isHollow()) {
-                    result += 1;
-                }
-                if (piece.getColor().equals(testedPiece.getColor())) {
+                    System.out.println("Hollow Equality");
                     result += 1;
                 }
                 if (piece.getForm().equals(testedPiece.getForm())) {
+                    System.out.println("Form Equality");
                     result += 1;
                 }
+                if (piece.getColor().equals(testedPiece.getColor())) {
+                    System.out.println("Color Equality");
+                    result += 1;
+                }
+            } else {
+                System.out.println("piece null");
+                result += 1;
             }
         }
         return result;
