@@ -7,7 +7,7 @@ public class Heuristic {
     private Heuristic (Board board){
         this.board = board;
     }
-    private Heuristic(){
+    public Heuristic(){
         this.board = new Board();
     }
 
@@ -22,10 +22,27 @@ public class Heuristic {
     }
 
     //x:row y:Column
-    private int getOpenRowFromEmplacement(int x, int y, Piece testedPiece) {
-        for(int i = 0; i< board.getSIZE(); i++) {
+    public int getOpenRowFromEmplacement(int row, Piece testedPiece) {
+        int result = 0;
+        for (int column = 0; column < board.getSIZE(); column++) {
+            Piece piece = board.getPiece(row, column);
+            if (piece != null) {
+                System.out.println("ICI");
+                if (piece.isBig() == testedPiece.isBig()) {
+                    result += 1;
+                }
+                if (piece.isHollow() && testedPiece.isHollow()) {
+                    result += 1;
+                }
+                if (piece.getColor().equals(testedPiece.getColor())) {
+                    result += 1;
+                }
+                if (piece.getForm().equals(testedPiece.getForm())) {
+                    result += 1;
+                }
+            }
         }
-        return 0;
+        return result;
     }
 
     private int getOpenColumnFromEmplacement(int x, int y,Piece testedPiece) {
@@ -37,15 +54,15 @@ public class Heuristic {
         return 0;
     }
 
-    private boolean isOpenRaw(int x,Piece testedPiece){
+    private boolean isOpenRaw(int x,Piece testedPiece) {
         List<Piece> pieces = board.getRow(x);
         List<Piece> sameCarateristicsPiece = new ArrayList<>();
-        if(pieces.size() == 0) return true;
+        if (pieces.size() == 0) return true;
 
-        for(Piece p : pieces) {
+        for (Piece p : pieces) {
             if (p.haveOneCaracteristicsInCommun(testedPiece)) {
-                for(Piece piece : sameCarateristicsPiece){
-                    if(!p.haveOneCaracteristicsInCommun(piece)){
+                for (Piece piece : sameCarateristicsPiece) {
+                    if (!p.haveOneCaracteristicsInCommun(piece)) {
                         return false;
                     }
                     sameCarateristicsPiece.add(piece);

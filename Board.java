@@ -26,7 +26,7 @@ public class Board {
     }
 
     public List<Piece> getRow(int x) {
-        if (x < SIZE) {
+        if (x >= SIZE) {
             throw new AssertionError();
         }
         List<Piece> result = new ArrayList<Piece>();
@@ -38,6 +38,7 @@ public class Board {
         }
         return result;
     }
+
     public List<Piece> getColumn(int y) {
         if (y < SIZE) {
             throw new AssertionError();
@@ -65,9 +66,21 @@ public class Board {
         return result;
     }
 
+    public ArrayList<Couple> getEmptyCell() {
+        ArrayList<Couple> list = new ArrayList<Couple>();
+        for (int row = 0; row < SIZE; row++) {
+            for (int column = 0; column < SIZE; column++) {
+                if (board[row][column] == null) {
+                    list.add(new Couple(row, column));
+                }
+            }
+        }
+        return list;
+    }
+
     // Commandes
-    public void setPiece(Piece piece, int x, int y) {
-        board[x][y] = piece;
+    public void setPiece(Piece piece, int row, int column) {
+        board[row][column] = piece;
     }
 
 
