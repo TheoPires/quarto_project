@@ -1,3 +1,4 @@
+
 public class Move {
     // ATTRIBUTES
     private int x;
@@ -24,6 +25,7 @@ public class Move {
         return piece;
     }
 
+
     //METHODS
     public void setX(int x) {
         this.x = x;
@@ -35,5 +37,9 @@ public class Move {
 
     public void setPiece(Piece piece) {
         this.piece = piece;
+    }
+
+    public String toString() {
+        return "[" + x + ", " + y + "] : " + ((piece == null ) ? "Null" : piece.name());
     }
 }

@@ -29,12 +29,10 @@ public class Board {
         if (x >= SIZE) {
             throw new AssertionError();
         }
-        List<Piece> result = new ArrayList<Piece>();
+        List<Piece> result = new ArrayList<>();
         for (int i = 0; i < SIZE; i++) {
             Piece p = getPiece(x,i);
-            if (p != null) {
-                result.add(p);
-            }
+            result.add(p);
         }
         return result;
     }
@@ -43,35 +41,35 @@ public class Board {
         if (y < SIZE) {
             throw new AssertionError();
         }
-        List<Piece> result = new ArrayList<Piece>();
+        List<Piece> result = new ArrayList<>();
         for (int i = 0; i < SIZE; i++) {
             Piece p = getPiece(i,y);
-            if (p != null) {
-                result.add(p);
-            }
+            result.add(p);
         }
         return result;
 
     }
 
-    /* A REFAIRE POUR LES DIAGONALES*/
     public List<Piece> getDiagonal(int x, int y) {
-        List<Piece> result = new ArrayList<Piece>();
-        for (int i = 0; i < SIZE; i++) {
-            Piece p = getPiece(x + i, y + i);
-            if (p != null) {
-                result.add(p);
+        List<Piece> result = new ArrayList<>();
+        if(x == y) {
+            for (int i = 0; i < getSIZE(); i++) {
+                result.add(board[i][i]);
+            }
+        }else if(x+y == 3){
+            for(int i=3,j=0; i<getSIZE(); i--,j++){
+                result.add(board[i][j]);
             }
         }
         return result;
     }
 
-    public ArrayList<Couple> getEmptyCell() {
-        ArrayList<Couple> list = new ArrayList<Couple>();
+    public List<Move> getEmptyCell() {
+        ArrayList<Move> list = new ArrayList<Move>();
         for (int row = 0; row < SIZE; row++) {
             for (int column = 0; column < SIZE; column++) {
                 if (board[row][column] == null) {
-                    list.add(new Couple(row, column));
+                    list.add(new Move(row, column, null));
                 }
             }
         }
