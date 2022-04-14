@@ -1,3 +1,7 @@
+import model.Board;
+import model.Move;
+import model.Piece;
+
 import java.util.*;
 
 public class Heuristic {

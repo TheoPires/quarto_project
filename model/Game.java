@@ -1,12 +1,22 @@
+package model;
+
+import controller.QuartoController;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
 
     //Attributs
+    private QuartoController controller;
     private Board board;
     private List<Piece> pieces;
     private int level;
+
+    public Game(QuartoController controller){
+        this.controller = controller;
+        board = new Board();
+    }
 
     //Requêtes
     public List<Piece> getPieces(){
@@ -14,7 +24,7 @@ public class Game {
     }
 
     public int getSize(){
-        return this.pieces.size();
+        return this.board.getSIZE();
     }
 
     //Commandes
