@@ -1,3 +1,8 @@
+import IA.Heuristic;
+import model.Board;
+import model.Move;
+import model.Piece;
+
 public class Test {
 
     public static void main(String args[]) {
