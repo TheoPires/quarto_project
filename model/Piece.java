@@ -22,7 +22,8 @@ public enum Piece {
 	BIG_ROUND_HOLLOW_BROWN(true, "ROUND", true, new Color(102,51,0)),
 	BIG_ROUND_FIELD_YELLOW(true, "ROUND", false, Color.YELLOW),
 	BIG_ROUND_FIELD_BROWN(true, "ROUND", false, new Color(102,51,0));
-	
+
+
 	private boolean big;
 	private boolean hollow;
 	private Color color;
@@ -49,6 +50,15 @@ public enum Piece {
 
 	public String getForm() {
 		return form;
+	}
+
+	public String getNameImage(){
+		String result = "";
+		result+=(isBig())?"big_":"sml_";
+		result+=(getForm().equals("SQUARE"))?"sqr_":"cir_";
+		result+=(isHollow())?"hlw_":"fll_";
+		result+=(getColor().equals(Color.YELLOW))?"ylw":"bwn";
+		return result;
 	}
 
 	public boolean haveOneCaracteristicsInCommun(Piece piece){

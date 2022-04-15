@@ -34,5 +34,6 @@ public class QuartoController
     public int getSizes() {
         return game.getSize();
     }
+
 }
 

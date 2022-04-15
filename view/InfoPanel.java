@@ -1,12 +1,7 @@
 package view;
 
-import controller.QuartoController;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
 
 public class InfoPanel extends JPanel {
 
@@ -55,7 +50,7 @@ public class InfoPanel extends JPanel {
 
     private void setupPieceSelected() {
         selectedPiecePanel = new JPanel();
-        selectedPieceImage = new ImageIcon( "img/big_bwn_cir.png");
+        selectedPieceImage = new ImageIcon("img/big_cir_fld_bwn.png");
         JLabel image = new JLabel( selectedPieceImage);
         selectedPiecePanel.setLayout(new BorderLayout());
         selectedPiecePanel.add(image,BorderLayout.CENTER);

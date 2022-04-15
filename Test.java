@@ -40,6 +40,9 @@ public class Test {
         Move m = h.calculateBestMove(Piece.SMALL_ROUND_HOLLOW_BROWN);
         System.out.println(m.toString());
 
+        System.out.println(Piece.SMALL_ROUND_HOLLOW_BROWN.getNameImage());
+        System.out.println(Piece.BIG_SQUARE_FIELD_YELLOW.getNameImage());
+
 
 
     }
