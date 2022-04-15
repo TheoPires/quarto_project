@@ -1,18 +1,21 @@
 package view;
 
 import controller.QuartoController;
+import model.Piece;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class QuartoView {
 
     private QuartoController controller;
 
     private JFrame mainFrame;
-    private JPanel playersPanel,boardPanel;
+    private JPanel playersPanel,boardPanel,gameMsgPanel;
     private InfoPanel infoPanel;
     private PieceListPanel piecePanel;
+    private JTextField txtGameMsg;
 
 
     private PlayerLabel player0;
@@ -32,10 +35,12 @@ public class QuartoView {
         setupBoardPanel();
         setupInfoPanel();
         setupFreePieceList();
+        setupGameTxt();
         mainFrame.add(this.playersPanel,BorderLayout.SOUTH);
         mainFrame.add(this.boardPanel,BorderLayout.CENTER);
         mainFrame.add(this.infoPanel,BorderLayout.EAST);
         mainFrame.add(this.piecePanel,BorderLayout.WEST);
+        mainFrame.add(this.gameMsgPanel,BorderLayout.NORTH);
 
         mainFrame.pack();
         mainFrame.setVisible(true);
@@ -57,8 +62,14 @@ public class QuartoView {
         this.infoPanel = new InfoPanel();
     }
     private void setupFreePieceList(){
-        piecePanel = new PieceListPanel();
-
+        piecePanel = new PieceListPanel(controller.getPiecesClone());
+    }
+    private void setupGameTxt(){
+        gameMsgPanel = new JPanel();
+        txtGameMsg = new JTextField();
+        txtGameMsg.setText("Début de la partie");
+        txtGameMsg.setEditable(false);
+        gameMsgPanel.add(txtGameMsg);
     }
 
 

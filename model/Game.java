@@ -2,6 +2,7 @@ package model;
 
 import controller.QuartoController;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class Game {
     public Game(QuartoController controller){
         this.controller = controller;
         board = new Board();
+        init();
     }
 
     //Requêtes
@@ -27,6 +29,28 @@ public class Game {
         return this.board.getSIZE();
     }
 
+    public void init(){
+        pieces = new ArrayList<>();
+        pieces.add(Piece.SMALL_SQUARE_HOLLOW_YELLOW);
+        pieces.add(Piece.SMALL_SQUARE_HOLLOW_BROWN);
+        pieces.add(Piece.SMALL_SQUARE_FIELD_YELLOW);
+        pieces.add(Piece.SMALL_SQUARE_FIELD_BROWN);
+
+        pieces.add(Piece.SMALL_ROUND_HOLLOW_YELLOW);
+        pieces.add(Piece.SMALL_ROUND_HOLLOW_BROWN);
+        pieces.add(Piece.SMALL_ROUND_FIELD_YELLOW);
+        pieces.add(Piece.SMALL_ROUND_FIELD_BROWN);
+
+        pieces.add(Piece.BIG_SQUARE_HOLLOW_YELLOW);
+        pieces.add(Piece.BIG_SQUARE_HOLLOW_BROWN);
+        pieces.add(Piece. BIG_SQUARE_FIELD_YELLOW);
+        pieces.add(Piece.BIG_SQUARE_FIELD_BROWN);
+
+        pieces.add(Piece.BIG_ROUND_HOLLOW_YELLOW);
+        pieces.add(Piece.BIG_ROUND_HOLLOW_BROWN);
+        pieces.add(Piece.BIG_ROUND_FIELD_YELLOW);
+        pieces.add(Piece.BIG_ROUND_FIELD_BROWN);
+    }
     //Commandes
     public void play(){
 

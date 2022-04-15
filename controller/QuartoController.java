@@ -8,6 +8,10 @@ import view.SquareButton;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class QuartoController
 {
@@ -35,5 +39,8 @@ public class QuartoController
         return game.getSize();
     }
 
+    public List<Piece> getPiecesClone(){
+        return List.copyOf(game.getPieces());
+    }
 }
 

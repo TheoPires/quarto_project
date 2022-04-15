@@ -56,7 +56,7 @@ public enum Piece {
 		String result = "";
 		result+=(isBig())?"big_":"sml_";
 		result+=(getForm().equals("SQUARE"))?"sqr_":"cir_";
-		result+=(isHollow())?"hlw_":"fll_";
+		result+=(isHollow())?"hlw_":"fld_";
 		result+=(getColor().equals(Color.YELLOW))?"ylw":"bwn";
 		return result;
 	}
