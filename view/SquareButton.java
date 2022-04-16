@@ -4,45 +4,49 @@ import javax.swing.*;
 import java.awt.*;
 public class SquareButton extends JButton{
 
-        public final int x;
-        public final int y;
-        Color defaultClr;
+    public final int row;
+    public final int col;
+    Color defaultClr;
+    String namePiece;
 
-        /**
-         * Constructs a new JButton that also stores a Square representing its location on a board
-         * @param x int
-         * @param y int
-         * @param color
-         */
-        public SquareButton(int x, int y, Color color)
-        {
-            super();
-            this.x = x;
-            this.y = y;
-            defaultClr = (color == null)? new Color(148, 93, 53) : color;
+    public SquareButton(int row, int col, Color color,String namePiece) {
+        super();
+        this.row = row;
+        this.col = col;
+        this.defaultClr = (color == null)? new Color(148, 93, 53) : color;
+        this.namePiece = namePiece;
 
-            setPreferredSize(new Dimension(60,60));
-            setBackground(defaultClr);
-            setContentAreaFilled(false);
-            setOpaque(true);
-            setMargin(new Insets(0,0,0,0));
-            setFocusPainted(false);
-        }
+        setPreferredSize(new Dimension(60,60));
+        setBackground(defaultClr);
+        setContentAreaFilled(false);
+        setOpaque(true);
+        setMargin(new Insets(0,0,0,0));
+        setFocusPainted(false);
+    }
+    public boolean haveNamePieceNull(){
+        return namePiece == null || namePiece.equals("");
+    }
 
-        /**
-         * Sets the background color to green to represent a highlighted square.
-         */
-        public void highLight()
-        {
-            setBackground(Color.GREEN);
-        }
+    public void setIcon(Icon icon,String namePiece){
+        super.setIcon(icon);
+        this.namePiece = namePiece;
+    }
 
-        /**
-         * Restores the original color of this SquareButton.
-         */
-        public void unHighLight()
-        {
-            setBackground(defaultClr);
-        }
+    /*public void highLight()
+    {
+        setBackground(Color.GREEN);
+    }
+
+    public void unHighLight()
+    {
+        setBackground(defaultClr);
+    }*/
+
+    public String getNamePiece() {
+            return this.namePiece;
+    }
+    public int getRow() { return row;}
+
+    public int getCol() { return col;}
 }
 

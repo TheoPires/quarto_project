@@ -1,21 +1,20 @@
 package view;
 
 import controller.QuartoController;
-import model.Piece;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 public class QuartoView {
 
     private QuartoController controller;
 
     private JFrame mainFrame;
-    private JPanel playersPanel,boardPanel,gameMsgPanel;
+    private JPanel playersPanel,gameMsgPanel;
+    private BoardPanel boardPanel;
     private InfoPanel infoPanel;
     private PieceListPanel piecePanel;
-    private JTextField txtGameMsg;
+    private JTextArea txtGameMsg;
 
 
     private PlayerLabel player0;
@@ -56,21 +55,62 @@ public class QuartoView {
         this.playersPanel.add(player1);
     }
     private void setupBoardPanel(){
-        this.boardPanel = new BoardPanel(controller.getSizes());
+        this.boardPanel = new BoardPanel(controller.getSizes(),controller,this);
     }
     private void setupInfoPanel(){
-        this.infoPanel = new InfoPanel();
+        this.infoPanel = new InfoPanel(controller);
     }
     private void setupFreePieceList(){
-        piecePanel = new PieceListPanel(controller.getPiecesClone());
+        piecePanel = new PieceListPanel(controller.getPieces(),controller,this);
     }
     private void setupGameTxt(){
         gameMsgPanel = new JPanel();
-        txtGameMsg = new JTextField();
+        txtGameMsg = new JTextArea();
         txtGameMsg.setText("Début de la partie");
         txtGameMsg.setEditable(false);
+        txtGameMsg.setFont(new Font("Serif",Font.BOLD,30));
+        JButton btn = new JButton("Commencer une partie");
+        btn.addActionListener(e ->{
+
+            controller.startGame();
+            txtGameMsg.setText("Sélectionner une pièce");
+            btn.setEnabled(false);
+            btn.setVisible(false);
+
+        });
         gameMsgPanel.add(txtGameMsg);
+        gameMsgPanel.add(btn);
     }
 
+    public void updateSelectedPiece(String namePiece){
+        infoPanel.updateSelectedPiece(namePiece);
+    }
+    public void refresh(){
+        this.boardPanel.refreshBoard();
 
+        this.playersPanel.revalidate();
+        this.boardPanel.revalidate();
+        this.infoPanel.revalidate();
+        this.gameMsgPanel.revalidate();
+
+        this.playersPanel.repaint();
+        this.boardPanel.repaint();
+        this.infoPanel.repaint();
+        this.gameMsgPanel.repaint();
+
+    }
+
+    public void setTxtPlacePiece() {
+        txtGameMsg.setText("Placer la pièce sélectionner sur le plateau.");
+    }
+    public void setTxtSelectPiece() {
+        txtGameMsg.setText("Sélectionner une pièce pour votre adversaire");
+    }
+
+    public void addHistorySelectedPiece(String namePiece){
+        infoPanel.addHistorySelectedPiece(namePiece);
+    }
+    public void addHistoryPlace(int x, int y){
+        infoPanel.addHistoryPlace(x,y);
+    }
 }

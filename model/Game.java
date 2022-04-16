@@ -3,6 +3,7 @@ package model;
 import controller.QuartoController;
 
 import java.awt.*;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,17 +13,27 @@ public class Game {
     private QuartoController controller;
     private Board board;
     private List<Piece> pieces;
-    private int level;
+    private List<Move> movesPlay;
+    private Piece selectedPiece;
+
+    private boolean needSelectedPiece;
+    private boolean needPlacePiece;
+
+    private int depth;
 
     public Game(QuartoController controller){
         this.controller = controller;
         board = new Board();
+        this.selectedPiece = null;
         init();
     }
 
     //Requêtes
     public List<Piece> getPieces(){
         return this.pieces;
+    }
+    public List<Move> getMoves(){
+        return this.movesPlay;
     }
 
     public int getSize(){
@@ -31,6 +42,7 @@ public class Game {
 
     public void init(){
         pieces = new ArrayList<>();
+        movesPlay = new ArrayList<>();
         pieces.add(Piece.SMALL_SQUARE_HOLLOW_YELLOW);
         pieces.add(Piece.SMALL_SQUARE_HOLLOW_BROWN);
         pieces.add(Piece.SMALL_SQUARE_FIELD_YELLOW);
@@ -50,10 +62,33 @@ public class Game {
         pieces.add(Piece.BIG_ROUND_HOLLOW_BROWN);
         pieces.add(Piece.BIG_ROUND_FIELD_YELLOW);
         pieces.add(Piece.BIG_ROUND_FIELD_BROWN);
+
     }
     //Commandes
-    public void play(){
+    public void play(Move move){
+        System.out.println(move.getPiece()+" "+move.getX()+" "+move.getY());
+        board.setPiece(move.getPiece(),move.getX(),move.getY());
+        pieces.remove(selectedPiece);
+        movesPlay.add(move);
+        selectedPiece = null;
+        needSelectedPiece = true;
+        needPlacePiece = false;
+    }
 
+    public void startGame(){
+        needSelectedPiece = true;
+        needPlacePiece = false;
+
+    }
+
+    public void setSelectedPiece(String namePiece){
+        for(Piece p : pieces){
+            if(p.getNameImage().equals(namePiece)){
+                selectedPiece = p;
+            }
+        }
+        needSelectedPiece = false;
+        needPlacePiece = true;
     }
 
     public boolean isGameFinishLevel1() {
@@ -77,5 +112,17 @@ public class Game {
 
         }
         return false;
+    }
+
+    public boolean canSelectedNewPiece() {
+        return needSelectedPiece;
+    }
+    public boolean canPlaceNewPiece() {
+        return needPlacePiece;
+    }
+
+    public void setPiece(int x, int y){
+        play(new Move(x,y,selectedPiece));
+
     }
 }

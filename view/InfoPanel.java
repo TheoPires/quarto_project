@@ -1,24 +1,27 @@
 package view;
 
+import controller.QuartoController;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class InfoPanel extends JPanel {
 
+    private QuartoController controller;
     private JTabbedPane infoOnglet;
     private JPanel rulesPanel, historyPanel,selectedPiecePanel;
-    private ImageIcon selectedPieceImage;
+    private JLabel selectedPieceImage;
 
     private JTextArea historyText;
 
-    public InfoPanel (){
+    public InfoPanel (QuartoController controller){
+        this.controller = controller;
         this.setLayout(new BorderLayout());
         infoOnglet = new JTabbedPane();
 
         setupRulesPanel();
         setupHistoryPanel();
         setupPieceSelected();
-        addTextInHistory("Joueur 1 à jouer.\n");
 
         infoOnglet.setBounds(40,20,300,300);
 
@@ -41,23 +44,34 @@ public class InfoPanel extends JPanel {
         historyPanel = new JPanel(new BorderLayout());
         historyText = new JTextArea();
         historyText.setEditable(false);
-        historyPanel.add(historyText);
+        JScrollPane scroll = new JScrollPane(historyText);
+        historyPanel.add(scroll);
     }
 
-    public void addTextInHistory(String msg){
-        historyText.append(msg);
-    }
+    //public void addTextInHistory(String msg){ historyText.append(msg);}
 
     private void setupPieceSelected() {
         selectedPiecePanel = new JPanel();
-        selectedPieceImage = new ImageIcon("img/big_cir_fld_bwn.png");
-        JLabel image = new JLabel( selectedPieceImage);
+        selectedPieceImage = new JLabel("Aucune pièce sélectionner");
         selectedPiecePanel.setLayout(new BorderLayout());
-        selectedPiecePanel.add(image,BorderLayout.CENTER);
+        selectedPiecePanel.add(selectedPieceImage,BorderLayout.CENTER);
     }
 
     public void updateSelectedPiece(String img){
-        selectedPieceImage= new ImageIcon(img);
+        selectedPiecePanel.remove(selectedPieceImage);
+        if(img == null || img.equals("")){
+            selectedPieceImage = new JLabel("Aucune pièce sélectionner");
+        }else {
+            selectedPieceImage = new JLabel(new ImageIcon("img/" + img + ".png"));
+        }
+        selectedPiecePanel.add(selectedPieceImage, BorderLayout.CENTER);
+    }
+
+    public void addHistoryPlace(int x, int y){
+        historyText.append("La pièce a été placé en ["+x+", "+y+"].\n");
+    }
+    public void addHistorySelectedPiece(String namePiece){
+        historyText.append("La pièce ["+namePiece+"] a été sélectionner.\n");
     }
 
 }
