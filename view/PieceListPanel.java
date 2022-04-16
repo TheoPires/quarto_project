@@ -37,17 +37,23 @@ public class PieceListPanel extends JPanel {
         btn.setIcon(new ImageIcon("img/"+namePiece+".png"));
         btn.addActionListener(e -> {
 
-            if(controller.canSelectedNewPiece() && controller.isGameStarted()) {
-                int res = JOptionPane.showConfirmDialog(this, "Etes-vous sur de sélectionner cette pièce?");
+            if (controller.isGameStarted()) {
+                if (controller.canSelectedNewPiece()) {
+                        int res = JOptionPane.showConfirmDialog(this, "Etes-vous sur de sélectionner cette pièce?");
 
-                if (res == JOptionPane.YES_OPTION) {
-                    selectedSquareButton = btn;
-                    controller.setSelectedPiece(btn.getNamePiece());
-                    view.addHistorySelectedPiece(selectedSquareButton.getNamePiece());
-                    btn.setEnabled(false);
+                        if (res == JOptionPane.YES_OPTION) {
+                            selectedSquareButton = btn;
+                            controller.setSelectedPiece(btn.getNamePiece());
+                            view.addHistorySelectedPiece(selectedSquareButton.getNamePiece());
+                            btn.setEnabled(false);
+                        }
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "Erreur: Action non permise\n Voir le message en haut de page");
                 }
-            }else{
-                JOptionPane.showMessageDialog(this,"Action non permise.\n Voir le message en haut de page");
+            }else {
+                JOptionPane.showMessageDialog(this,
+                        "Veuillez démarrer une partie.");
             }
         });
         return btn;

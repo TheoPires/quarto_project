@@ -62,11 +62,20 @@ public class QuartoController
 
     }
 
-
+    public void newGame(){
+        game.newGame();
+        view.newGame();
+    }
     public void setSelectedPieceSelectedPlace(int x, int y){
-        game.setPiece(x,y);
         view.setTxtSelectPiece();
+        game.setPiece(x,y);
         refresh();
+    }
+
+    public void endGame(){
+        view.endGame();
+        isGameStarted = false;
+
     }
 
     public boolean canSelectedNewPiece(){

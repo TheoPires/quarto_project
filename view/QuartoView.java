@@ -10,7 +10,8 @@ public class QuartoView {
     private QuartoController controller;
 
     private JFrame mainFrame;
-    private JPanel playersPanel,gameMsgPanel;
+    private JPanel playersPanel;
+    private GameMsgPanel gameMsgPanel;
     private BoardPanel boardPanel;
     private InfoPanel infoPanel;
     private PieceListPanel piecePanel;
@@ -31,11 +32,14 @@ public class QuartoView {
         mainFrame.setLayout(new BorderLayout());
 
         setupPlayerPanel();
+        mainFrame.add(this.playersPanel,BorderLayout.SOUTH);
+        init();
+    }
+    public void init(){
         setupBoardPanel();
         setupInfoPanel();
         setupFreePieceList();
         setupGameTxt();
-        mainFrame.add(this.playersPanel,BorderLayout.SOUTH);
         mainFrame.add(this.boardPanel,BorderLayout.CENTER);
         mainFrame.add(this.infoPanel,BorderLayout.EAST);
         mainFrame.add(this.piecePanel,BorderLayout.WEST);
@@ -43,6 +47,14 @@ public class QuartoView {
 
         mainFrame.pack();
         mainFrame.setVisible(true);
+    }
+
+    public void newGame(){
+        mainFrame.remove(this.boardPanel);
+        mainFrame.remove(this.infoPanel);
+        mainFrame.remove(this.piecePanel);
+        mainFrame.remove(this.gameMsgPanel);
+        init();
     }
 
 
@@ -63,24 +75,7 @@ public class QuartoView {
     private void setupFreePieceList(){
         piecePanel = new PieceListPanel(controller.getPieces(),controller,this);
     }
-    private void setupGameTxt(){
-        gameMsgPanel = new JPanel();
-        txtGameMsg = new JTextArea();
-        txtGameMsg.setText("Début de la partie");
-        txtGameMsg.setEditable(false);
-        txtGameMsg.setFont(new Font("Serif",Font.BOLD,30));
-        JButton btn = new JButton("Commencer une partie");
-        btn.addActionListener(e ->{
-
-            controller.startGame();
-            txtGameMsg.setText("Sélectionner une pièce");
-            btn.setEnabled(false);
-            btn.setVisible(false);
-
-        });
-        gameMsgPanel.add(txtGameMsg);
-        gameMsgPanel.add(btn);
-    }
+    private void setupGameTxt(){ gameMsgPanel = new GameMsgPanel(controller);}
 
     public void updateSelectedPiece(String namePiece){
         infoPanel.updateSelectedPiece(namePiece);
@@ -100,11 +95,18 @@ public class QuartoView {
 
     }
 
+    public void endGame(){
+        JOptionPane.showMessageDialog(new JPanel(),
+                    "Fin de la partie.");
+        newGame();
+
+    }
+
     public void setTxtPlacePiece() {
-        txtGameMsg.setText("Placer la pièce sélectionner sur le plateau.");
+        gameMsgPanel.setTxtPlacePiece();
     }
     public void setTxtSelectPiece() {
-        txtGameMsg.setText("Sélectionner une pièce pour votre adversaire");
+        gameMsgPanel.setTxtSelectPiece();
     }
 
     public void addHistorySelectedPiece(String namePiece){
