@@ -28,7 +28,7 @@ public class Board {
     }
 
     public List<Piece> getRow(int x) {
-        if (x >= SIZE) {
+        if (x >= SIZE || x < 0) {
             throw new AssertionError();
         }
         List<Piece> result = new ArrayList<>();
@@ -40,7 +40,7 @@ public class Board {
     }
 
     public List<Piece> getColumn(int y) {
-        if (y < SIZE) {
+        if (y >= SIZE || y < 0) {
             throw new AssertionError();
         }
         List<Piece> result = new ArrayList<>();
@@ -59,7 +59,8 @@ public class Board {
                 result.add(board[i][i]);
             }
         }else if(x+y == 3){
-            for(int i=3,j=0; i<getSIZE(); i--,j++){
+            for(int i=3,j=0; i>=0; i--,j++){
+                System.out.println(i+" "+j);
                 result.add(board[i][j]);
             }
         }
@@ -67,7 +68,7 @@ public class Board {
     }
 
     public List<Move> getEmptyCell() {
-        ArrayList<Move> list = new ArrayList<Move>();
+        ArrayList<Move> list = new ArrayList<>();
         for (int row = 0; row < SIZE; row++) {
             for (int column = 0; column < SIZE; column++) {
                 if (board[row][column] == null) {

@@ -5,6 +5,7 @@ import controller.QuartoController;
 import java.awt.*;
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Game {
@@ -19,12 +20,12 @@ public class Game {
     private boolean needSelectedPiece;
     private boolean needPlacePiece;
 
+    private boolean isGameFinish = false;
+
     private int depth;
 
     public Game(QuartoController controller){
         this.controller = controller;
-        board = new Board();
-        this.selectedPiece = null;
         init();
     }
 
@@ -43,6 +44,8 @@ public class Game {
     public void init(){
         pieces = new ArrayList<>();
         movesPlay = new ArrayList<>();
+        board = new Board();
+        this.selectedPiece = null;
         pieces.add(Piece.SMALL_SQUARE_HOLLOW_YELLOW);
         pieces.add(Piece.SMALL_SQUARE_HOLLOW_BROWN);
         pieces.add(Piece.SMALL_SQUARE_FIELD_YELLOW);
@@ -73,9 +76,14 @@ public class Game {
         selectedPiece = null;
         needSelectedPiece = true;
         needPlacePiece = false;
+
+        if(isFinishedLevel1()){
+            controller.endGame();
+        }
     }
 
     public void startGame(){
+        init();
         needSelectedPiece = true;
         needPlacePiece = false;
 
@@ -91,29 +99,6 @@ public class Game {
         needPlacePiece = true;
     }
 
-    public boolean isGameFinishLevel1() {
-        List<List<Piece>> listLine = new ArrayList<List<Piece>>();
-        for (int i = 0; i < board.getSIZE(); i++){
-
-            if (board.getRow(i).size() == board.getSIZE()){
-                //Traitement
-                /* pour chaque caractéristique de la premeiere pièce faire*/
-                    //la comparaison de la caractéristique avec les 4 caractéristiques des autres pièces
-                    //Si les pièces ont la même caractéristique alors
-                        //return true
-                //fin pour
-
-            }
-            if(board.getColumn(i).size() == board.getSIZE()){
-                //Traitement
-            }
-        }
-        if(board.getDiagonal(0,0).size() == board.getSIZE()){
-
-        }
-        return false;
-    }
-
     public boolean canSelectedNewPiece() {
         return needSelectedPiece;
     }
@@ -124,5 +109,60 @@ public class Game {
     public void setPiece(int x, int y){
         play(new Move(x,y,selectedPiece));
 
+    }
+
+    private boolean isGameFinish(){
+        return isGameNull()
+                || isFinishedLevel1()
+                /*||  isFinishedLevel2
+                * ||  isFinishedLevel3
+                * ||  isFinishedLevel4
+                * */;
+    }
+
+    private boolean isGameNull(){
+        //true if game isn't finish and not empty cells
+        return !isGameFinish && board.getEmptyCell().size() == 0;
+    }
+
+    private boolean isFinishedLevel1(){
+        for(int i = 0; i< getSize();i++){
+            if(haveCaracteristicInCommun(board.getRow(i))){
+                return true;
+            }
+            if(haveCaracteristicInCommun(board.getColumn(i))){
+                return true;
+            }
+        }
+
+        if(haveCaracteristicInCommun(board.getDiagonal(0,0))) return true;
+        if(haveCaracteristicInCommun(board.getDiagonal(3,0))) return true;
+
+        return false;
+    }
+
+
+    private boolean haveCaracteristicInCommun(List<Piece> list){
+        // [0]BIG,     [1] SMALL, [2] SQUARE, [3] ROUND
+        // [4] HOLLOW, [5] FIELD, [6] YELLOW, [7] BROWN
+
+        int[] temp = new int[8];  //Stock all commun caracteristics
+        for(Piece p : list){
+            if(p != null){
+                if(p.isBig()){temp[0]++;}else{temp[1]++;}
+                if(p.getForm().equals("SQUARE")){temp[2]++;}else{temp[3]++;}
+                if(p.isHollow()){temp[4]++;}else{temp[5]++;}
+                if(p.getColor().equals(Color.YELLOW)){temp[6]++;}else{temp[7]++;}
+            }
+        }
+            for(int i = 0; i<temp.length;i++){
+                System.out.print(temp[i]+", ");
+                if(temp[i] == 4) return true;
+            }
+        System.out.println("\n---------------");
+        return false;
+    }
+    public void newGame(){
+        init();
     }
 }
