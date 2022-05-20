@@ -38,7 +38,7 @@ public class Tree {
         board.setPiece(Piece.BIG_ROUND_HOLLOW_BROWN, 3, 2);
 
 //        Noeud root
-        rootNode = new Node(-1, board);
+        rootNode = new Node(-1, null, board);
 
 //        System.out.println("minimax : " + new Minimax().minimax(5, rootNode));
 //        System.out.println("negamax : " + new Negamax().negamax(5, rootNode));

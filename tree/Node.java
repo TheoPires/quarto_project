@@ -14,25 +14,27 @@ public class Node {
     private int who;
     private Board boardConfig;
     private Move moveTodo;
-    private int depth;
     private Double weight;
     private List<Node> nodes;
+    private Node parent;
 
     //Constructors
 
-    public Node(int who, Board board, Move move) {
+    public Node(int who, Node parent, Board board, Move move) {
         this.number = numberGenerate++;
         this.who = who;
         this.boardConfig = board;
         this.moveTodo = move;
         this.nodes = new ArrayList<>();
+        this.parent = parent;
     }
 
-    public Node(int who, Board board) {
+    public Node(int who, Node parent, Board board) {
         this.number = numberGenerate++;
         this.who = who;
         this.boardConfig = board;
         this.nodes = new ArrayList<>();
+        this.parent = parent;
     }
 
 
@@ -40,8 +42,6 @@ public class Node {
     public boolean isLeaf(){
         return this.nodes.isEmpty();
     }
-
-
 
     public int getNumber() {
         return this.number;
@@ -67,26 +67,24 @@ public class Node {
         return this.moveTodo;
     }
 
-    //Setter
+    public boolean isMax() {
+        return this.getWho() > 0;
+    }
 
+    public boolean isMin() {
+        return this.getWho() < 0;
+    }
+
+    public Node getParent() {
+        return this.parent;
+    }
+
+    //Setter
     public void setWeight(double weight) {
         this.weight = weight;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder("[" + this.number + "]");
-        if(!isLeaf()) {
-            result.append(" -> {");
-            for(Node n : this.nodes)
-                result.append(n.toString());
-            result.append("} ");
-        }
-        return result.toString();
-    }
-
     //Method
-
     /**
      * Ajoute en tant que fils le <b>node</b> donné en argument.
      * @param node
@@ -119,10 +117,21 @@ public class Node {
                 Board cloneBoard = boardConfig.copy();
                 Move move = new Move(listEmptyCell.get(i).getX(), listEmptyCell.get(i).getY(), listRemPieces.get(j));
                 cloneBoard.playMove(move);
-                Node n = new Node(who * -1, cloneBoard, move);
-                System.out.println(move);
+                Node n = new Node(who * -1, this, cloneBoard, move);
                 this.nodes.add(n);
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder("[" + this.number + "]");
+        if(!isLeaf()) {
+            result.append(" -> {");
+            for(Node n : this.nodes)
+                result.append(n.toString());
+            result.append("} ");
+        }
+        return result.toString();
     }
 }

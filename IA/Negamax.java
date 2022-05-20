@@ -3,19 +3,21 @@ package IA;
 import model.Couple;
 import tree.Node;
 
-//Ajouter méthode de génération dans minimax
 public class Negamax {
-
+    /**
+     * Compute the negamax value from a tree with <b>node</b> as root and depth of <b>depth</b>
+     * @param depth
+     * @param node
+     * @return the negamax value of a tree with <b>node</b> as root and depth of <b>depth</b>
+     */
     public double negamax(final int depth, Node node){
         node.generateChild();
         if (depth == 0 || node.isLeaf()) {
             Couple tmp = new Couple(node.getMove().getX(), node.getMove().getY());
-            if(node.getWho() > 0)
+            if(node.isMax())
                 node.setWeight(Heuristic.calulateWeight(node.getBoard(),tmp,node.getMove().getPiece()));
             else
                 node.setWeight(-Heuristic.calulateWeight(node.getBoard(),tmp,node.getMove().getPiece()));
-
-            System.out.println("weight: "+node.getWeight());
             return node.getWeight();
         }
         double val;

@@ -18,7 +18,7 @@ public class Alphabeta {
         }
         int i = 1;
         //MAX
-        if(node.getWho() > 0){
+        if(node.isMax()){
             List<Node> succNode = node.getNodes();
             while(alpha < beta && i <= node.getNodes().size()){
                 alpha = Double.max(alpha, alphaBeta(succNode.get(i-1),alpha,beta,depth-1));

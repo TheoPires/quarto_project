@@ -6,10 +6,11 @@ import tree.Node;
 //Ajouter méthode de génération dans minimax
 public class Minimax {
     /**
-     * Calcul la valeur minimax d'un
+     * Calcul la valeur minimax d'un à partir d'un <b>node</b> en tant que racine d'un
+     * arbre de profondeur <b>depth</b>
      * @param depth
      * @param node
-     * @return
+     * @return la valeur minimax de l'arbre de racine <b>node</b> et de profondeur <b>depth</b>
      */
     public double minimax(final int depth, Node node) {
         node.generateChild();
@@ -21,7 +22,7 @@ public class Minimax {
         }
         double val;
         //Max
-        if(node.getWho() > 0){
+        if(node.isMax()){
             val = Double.NEGATIVE_INFINITY;
             for(Node n : node.getNodes()) {
                 val = Double.max(val, minimax(depth - 1, n));

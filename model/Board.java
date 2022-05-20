@@ -5,8 +5,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Classe représentant notre tableau de jeu et la liste de pièce restante à jouer.
+ * @author HOCHE Jessy et PIRES Théo
+ */
 public class Board{
-    // Constante
+    // constant
     final int SIZE = 4;
 
     // Attribut
@@ -25,11 +29,10 @@ public class Board{
         this.pieces = pieces;
     }
 
-    // Requêtes
-
+    // Getter
     /**
      * Obtenir la liste des pièces qu'il reste à placer sur le plateau de jeu.
-     * @return
+     * @return a list of piece
      */
     public List<Piece> getPieces() {
         return this.pieces;
@@ -97,7 +100,7 @@ public class Board{
         return list;
     }
 
-    // Commandes
+    // Setter
     public void setPiece(Piece piece, int row, int column) {
         board[row][column] = piece;
         this.getPieces().remove(piece);
