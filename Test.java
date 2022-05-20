@@ -1,11 +1,12 @@
 import IA.Heuristic;
 import model.Board;
+import model.Couple;
 import model.Move;
 import model.Piece;
 
 public class Test {
 
-    public static void main(String args[]) {
+    /*public static void main(String args[]) {
         Board board = new Board();
 
         board.setPiece(Piece.BIG_ROUND_FIELD_BROWN, 1, 1);
@@ -18,8 +19,8 @@ public class Test {
 
         System.out.println(board.getRow(1).toString());
 
-        for (Move move : board.getEmptyCell()) {
-            System.out.println("(" + move.getX()+","+ move.getY()+")");
+        for (Couple couple : board.getEmptyCell()) {
+            System.out.println("(" + couple.getX()+","+ couple.getY()+")");
         }
 
         Heuristic h = new Heuristic(board);
@@ -45,5 +46,5 @@ public class Test {
 
 
 
-    }
+    }*/
 }

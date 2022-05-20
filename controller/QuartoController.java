@@ -4,13 +4,7 @@ import model.Game;
 import model.Move;
 import model.Piece;
 import view.QuartoView;
-import view.SquareButton;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class QuartoController

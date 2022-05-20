@@ -1,6 +1,7 @@
 package IA;
 
 import model.Board;
+import model.Couple;
 import model.Move;
 import model.Piece;
 
@@ -8,40 +9,34 @@ import java.util.*;
 
 public class Heuristic {
 
-    private Board board;
-
-    public  Heuristic (Board board){
-        this.board = board;
-    }
-    public Heuristic(){
-        this.board = new Board();
-    }
-
-    public Move calculateBestMove(Piece piece) {
-        List<Move> listMove = board.getEmptyCell();
+    public static Move calculateBestMove(Board board, Piece piece) {
+        List<Couple> listMove = board.getEmptyCell();
         List<Move> listBestMove = new ArrayList<>();
-        Move bestMove = null;
         int bestWeight = 0;
-        for (Move m : listMove) {
-            int moveWeight = 0;
-            moveWeight += getOpenRowFromEmplacement(m.getX(), piece);
-            moveWeight += getOpenColumnFromEmplacement(m.getY(), piece);
-            moveWeight += getOpenDiagonalLeftToRight(m.getX(), m.getY(), piece);
-            moveWeight += getOpenDiagonalRightToLeft(m.getX(), m.getY(), piece);
+        for (Couple c : listMove) {
+            int moveWeight = calulateWeight(board, c,piece);
             if (moveWeight > bestWeight) {
                listBestMove.clear();
-               listBestMove.add(m);
+               listBestMove.add(new Move(c.getX(),c.getY(),piece));
                 bestWeight = moveWeight;
-                bestMove = m;
             }else if(moveWeight == bestWeight){
-                listBestMove.add(m);
+                listBestMove.add(new Move(c.getX(),c.getY(),piece));
             }
         }
         Random r = new Random();
         return listBestMove.get(r.nextInt(listBestMove.size()));
     }
 
-    public int getOpenRowFromEmplacement(int row, Piece testedPiece) {
+    public static int calulateWeight(Board board, Couple couple, Piece piece) {
+        int result = 0;
+        result += getOpenRowFromEmplacement(board, couple.getX(), piece);
+        result += getOpenColumnFromEmplacement(board, couple.getY(), piece);
+        result += getOpenDiagonalLeftToRight(board, couple.getX(), couple.getY(), piece);
+        result += getOpenDiagonalRightToLeft(board, couple.getX(), couple.getY(), piece);
+        return result;
+    }
+
+    public static int getOpenRowFromEmplacement(Board board, int row, Piece testedPiece) {
         int result = 0;
         for (int column = 0; column < board.getSIZE(); column++) {
             Piece piece = board.getPiece(row, column);
@@ -50,7 +45,7 @@ public class Heuristic {
         return result;
     }
 
-    public int getOpenColumnFromEmplacement(int column, Piece testedPiece) {
+    public static int getOpenColumnFromEmplacement(Board board, int column, Piece testedPiece) {
         int result = 0;
         for (int row = 0; row < board.getSIZE(); row++) {
             Piece piece = board.getPiece(row, column);
@@ -59,7 +54,7 @@ public class Heuristic {
         return result;
     }
 
-    public int getOpenDiagonalLeftToRight(int row, int column, Piece testedPiece) {
+    public static int getOpenDiagonalLeftToRight(Board board, int row, int column, Piece testedPiece) {
         if (row != column) {
             return 0;
         }
@@ -71,7 +66,7 @@ public class Heuristic {
         return result;
     }
 
-    public int getOpenDiagonalRightToLeft(int row, int column, Piece testedPiece) {
+    public static int getOpenDiagonalRightToLeft(Board board, int row, int column, Piece testedPiece) {
         if ((row + column) != 3) {
             return 0;
         }
@@ -83,7 +78,7 @@ public class Heuristic {
         return result;
     }
 
-    private int compareTwoPiece(Piece firstPiece, Piece secondPiece) {
+    private static int compareTwoPiece(Piece firstPiece, Piece secondPiece) {
         int result = 0;
         if (firstPiece != null) {
             if (firstPiece.isBig() == secondPiece.isBig()) {

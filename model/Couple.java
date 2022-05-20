@@ -1,31 +1,40 @@
+package model;
+
 public class Couple {
 
     private Integer x;
     private Integer y;
 
     public Couple(Integer fst, Integer snd) {
-        super();
         this.x = fst;
         this.y = snd;
     }
 
-    public Integer getFst() {
+    public Integer getX() {
         return x;
     }
 
-    public void setFst(String key) {
+    public void setX(String key) {
         this.x = x;
     }
 
-    public Integer getSnd() {
+    public Integer getY() {
         return y;
     }
 
-    public void setSnd(String value) {
+    public void setY(String value) {
         this.y = y;
     }
 
     public Object[] getCouple() {
         return new Object[] { this.x, this.y};
+    }
+
+    @Override
+    public String toString() {
+        return "Couple{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 }

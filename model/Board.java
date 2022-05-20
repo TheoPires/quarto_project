@@ -1,21 +1,34 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class Board {
+public class Board implements Cloneable{
     // Constante
     final int SIZE = 4;
 
     // Attribut
     private Piece[][] board;
+    private List<Piece> pieces;
 
     // Constructeur
     public Board() {
         board = new Piece[SIZE][SIZE];
+        pieces = new ArrayList<>();
+        Collections.addAll(pieces, Piece.values());
     }
 
     // Requêtes
+
+    /**
+     * Obtenir la liste des pièces qu'il reste à placer sur le plateau de jeu.
+     * @return
+     */
+    public List<Piece> getPieces() {
+        return this.pieces;
+    }
+
     public int getSIZE() {
         return SIZE;
     }
@@ -49,7 +62,6 @@ public class Board {
             result.add(p);
         }
         return result;
-
     }
 
     public List<Piece> getDiagonal(int x, int y) {
@@ -67,12 +79,12 @@ public class Board {
         return result;
     }
 
-    public List<Move> getEmptyCell() {
-        ArrayList<Move> list = new ArrayList<>();
+    public List<Couple> getEmptyCell() {
+        ArrayList<Couple> list = new ArrayList<>();
         for (int row = 0; row < SIZE; row++) {
             for (int column = 0; column < SIZE; column++) {
                 if (board[row][column] == null) {
-                    list.add(new Move(row, column, null));
+                    list.add(new Couple(row, column));
                 }
             }
         }
@@ -82,10 +94,16 @@ public class Board {
     // Commandes
     public void setPiece(Piece piece, int row, int column) {
         board[row][column] = piece;
+        this.getPieces().remove(piece);
     }
 
+    public void playMove(Move move) {
+        this.setPiece(move.getPiece(), move.getX(), move.getY());
+    }
 
-
-
-
+    @Override
+    public Object clone() throws CloneNotSupportedException
+    {
+        return (Board)super.clone();
+    }
 }

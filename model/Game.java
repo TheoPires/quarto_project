@@ -3,9 +3,8 @@ package model;
 import controller.QuartoController;
 
 import java.awt.*;
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Game {
@@ -13,7 +12,6 @@ public class Game {
     //Attributs
     private QuartoController controller;
     private Board board;
-    private List<Piece> pieces;
     private List<Move> movesPlay;
     private Piece selectedPiece;
 
@@ -31,7 +29,7 @@ public class Game {
 
     //Requêtes
     public List<Piece> getPieces(){
-        return this.pieces;
+        return this.board.getPieces();
     }
     public List<Move> getMoves(){
         return this.movesPlay;
@@ -42,36 +40,15 @@ public class Game {
     }
 
     public void init(){
-        pieces = new ArrayList<>();
         movesPlay = new ArrayList<>();
         board = new Board();
         this.selectedPiece = null;
-        pieces.add(Piece.SMALL_SQUARE_HOLLOW_YELLOW);
-        pieces.add(Piece.SMALL_SQUARE_HOLLOW_BROWN);
-        pieces.add(Piece.SMALL_SQUARE_FIELD_YELLOW);
-        pieces.add(Piece.SMALL_SQUARE_FIELD_BROWN);
-
-        pieces.add(Piece.SMALL_ROUND_HOLLOW_YELLOW);
-        pieces.add(Piece.SMALL_ROUND_HOLLOW_BROWN);
-        pieces.add(Piece.SMALL_ROUND_FIELD_YELLOW);
-        pieces.add(Piece.SMALL_ROUND_FIELD_BROWN);
-
-        pieces.add(Piece.BIG_SQUARE_HOLLOW_YELLOW);
-        pieces.add(Piece.BIG_SQUARE_HOLLOW_BROWN);
-        pieces.add(Piece. BIG_SQUARE_FIELD_YELLOW);
-        pieces.add(Piece.BIG_SQUARE_FIELD_BROWN);
-
-        pieces.add(Piece.BIG_ROUND_HOLLOW_YELLOW);
-        pieces.add(Piece.BIG_ROUND_HOLLOW_BROWN);
-        pieces.add(Piece.BIG_ROUND_FIELD_YELLOW);
-        pieces.add(Piece.BIG_ROUND_FIELD_BROWN);
-
     }
+
     //Commandes
     public void play(Move move){
         System.out.println(move.getPiece()+" "+move.getX()+" "+move.getY());
-        board.setPiece(move.getPiece(),move.getX(),move.getY());
-        pieces.remove(selectedPiece);
+        board.playMove(move);
         movesPlay.add(move);
         selectedPiece = null;
         needSelectedPiece = true;
@@ -90,7 +67,7 @@ public class Game {
     }
 
     public void setSelectedPiece(String namePiece){
-        for(Piece p : pieces){
+        for(Piece p : this.board.getPieces()){
             if(p.getNameImage().equals(namePiece)){
                 selectedPiece = p;
             }
@@ -108,10 +85,9 @@ public class Game {
 
     public void setPiece(int x, int y){
         play(new Move(x,y,selectedPiece));
-
     }
 
-    private boolean isGameFinish(){
+    public boolean isGameFinish(){
         return isGameNull()
                 || isFinishedLevel1()
                 /*||  isFinishedLevel2
