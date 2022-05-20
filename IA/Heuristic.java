@@ -80,7 +80,7 @@ public class Heuristic {
 
     private static int compareTwoPiece(Piece firstPiece, Piece secondPiece) {
         int result = 0;
-        if (firstPiece != null) {
+        if (firstPiece != null && firstPiece != secondPiece) {
             if (firstPiece.isBig() == secondPiece.isBig()) {
                 result += 1;
             }
@@ -94,7 +94,7 @@ public class Heuristic {
                 result += 1;
             }
         } else {
-            result += 1;
+           //result += 1;
         }
         return result;
     }
