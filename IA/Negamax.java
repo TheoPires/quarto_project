@@ -6,17 +6,16 @@ import tree.Node;
 //Ajouter méthode de génération dans minimax
 public class Negamax {
 
-    private Heuristic heuristic;
-
-    public Negamax(Heuristic heuristic){
-        this.heuristic = heuristic;
-    }
-
-    public double negamax(final int depth, Node node) throws CloneNotSupportedException {
+    public double negamax(final int depth, Node node){
         node.generateChild();
         if (depth == 0 || node.isLeaf()) {
             Couple tmp = new Couple(node.getMove().getX(), node.getMove().getY());
-            node.setWeight(Heuristic.calulateWeight(node.getBoard(),tmp,node.getMove().getPiece()));
+            if(node.getWho() > 0)
+                node.setWeight(Heuristic.calulateWeight(node.getBoard(),tmp,node.getMove().getPiece()));
+            else
+                node.setWeight(-Heuristic.calulateWeight(node.getBoard(),tmp,node.getMove().getPiece()));
+
+            System.out.println("weight: "+node.getWeight());
             return node.getWeight();
         }
         double val;

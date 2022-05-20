@@ -1,7 +1,9 @@
 package tree;
 
+import IA.Alphabeta;
 import IA.Heuristic;
 import IA.Minimax;
+import IA.Negamax;
 import model.Board;
 import model.Couple;
 import model.Piece;
@@ -38,7 +40,9 @@ public class Tree {
 //        Noeud root
         rootNode = new Node(-1, board);
 
-        System.out.println("minimax : " + new Minimax().minimax(5, rootNode));
+//        System.out.println("minimax : " + new Minimax().minimax(5, rootNode));
+//        System.out.println("negamax : " + new Negamax().negamax(5, rootNode));
+//        System.out.println("alphaBeta : " + new Alphabeta().alphaBeta(rootNode,Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,3));
     }
 
     public Node getNode(){
