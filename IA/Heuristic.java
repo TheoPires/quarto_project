@@ -94,7 +94,8 @@ public class Heuristic {
                 result += 1;
             }
         } else {
-           //result += 1;
+            //Case Vide
+            result += 1;
         }
         return result;
     }

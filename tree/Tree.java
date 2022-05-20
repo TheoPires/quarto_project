@@ -1,5 +1,6 @@
 package tree;
 
+import IA.Heuristic;
 import IA.Minimax;
 import model.Board;
 import model.Couple;
@@ -31,12 +32,11 @@ public class Tree {
 
         board.setPiece(Piece.BIG_ROUND_HOLLOW_YELLOW, 2, 3);
         board.setPiece(Piece.BIG_ROUND_HOLLOW_BROWN, 3, 2);
-        board.setPiece(Piece.BIG_ROUND_FIELD_YELLOW, 0, 3);
 
         //Noeud root
         rootNode = new Node(1, board);
 
-        System.out.println("minimax : " + new Minimax().minimax(1, rootNode));
+        System.out.println("minimax : " + new Minimax().minimax(3, rootNode));
     }
 
     public Node getNode(){

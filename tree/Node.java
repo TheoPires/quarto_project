@@ -115,11 +115,8 @@ public class Node {
     public void generateChild() throws CloneNotSupportedException{
         List<Couple> listEmptyCell = boardConfig.getEmptyCell();
         List<Piece> listRemPieces = boardConfig.getPieces();
-        System.out.println("Valeur nbr cellule vide : " + listEmptyCell.size());
-        System.out.println("Valeur nbr pièces à placer : " + listRemPieces.size());
         for (int i = 0; i < listEmptyCell.size(); i++) {
             for (int j = 0; j < listRemPieces.size(); j++) {
-                System.out.println("["+i+", "+j+"]");
                 Board cloneBoard = (Board) this.getBoard().clone();
                 Move move = new Move(listEmptyCell.get(i).getX(), listEmptyCell.get(i).getY(), listRemPieces.get(j));
                 cloneBoard.playMove(move);
