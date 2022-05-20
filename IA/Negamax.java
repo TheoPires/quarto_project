@@ -12,10 +12,12 @@ public class Negamax {
         this.heuristic = heuristic;
     }
 
-    public double negamax(final int depth, Node node) {
+    public double negamax(final int depth, Node node) throws CloneNotSupportedException {
+        node.generateChild();
         if (depth == 0 || node.isLeaf()) {
             Couple tmp = new Couple(node.getMove().getX(), node.getMove().getY());
-            return Heuristic.calulateWeight(node.getBoard(),tmp,node.getMove().getPiece());
+            node.setWeight(Heuristic.calulateWeight(node.getBoard(),tmp,node.getMove().getPiece()));
+            return node.getWeight();
         }
         double val;
         //node generate value

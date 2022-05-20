@@ -1,10 +1,11 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class Board implements Cloneable{
+public class Board{
     // Constante
     final int SIZE = 4;
 
@@ -17,6 +18,11 @@ public class Board implements Cloneable{
         board = new Piece[SIZE][SIZE];
         pieces = new ArrayList<>();
         Collections.addAll(pieces, Piece.values());
+    }
+
+    public Board(Piece[][] board, List<Piece> pieces) {
+        this.board = board;
+        this.pieces = pieces;
     }
 
     // Requêtes
@@ -101,9 +107,14 @@ public class Board implements Cloneable{
         this.setPiece(move.getPiece(), move.getX(), move.getY());
     }
 
-    @Override
-    public Object clone() throws CloneNotSupportedException
-    {
-        return (Board)super.clone();
+    public Board copy() {
+        Piece[][] board = new Piece[SIZE][SIZE];
+        for( int i = 0; i < SIZE;i++){
+            for( int j = 0; j < SIZE; j++) {
+                board[i][j] = this.board[i][j];
+            }
+        }
+        List<Piece> pieces = new ArrayList<>(this.pieces);
+        return new Board(board,pieces);
     }
 }

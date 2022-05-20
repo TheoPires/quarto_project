@@ -75,14 +75,14 @@ public class Node {
 
     @Override
     public String toString() {
-        String result = "["+this.number+"]";
+        StringBuilder result = new StringBuilder("[" + this.number + "]");
         if(!isLeaf()) {
-            result += " -> {";
+            result.append(" -> {");
             for(Node n : this.nodes)
-                result += n.toString();
-            result += "} ";
+                result.append(n.toString());
+            result.append("} ");
         }
-        return result;
+        return result.toString();
     }
 
     //Method
@@ -110,17 +110,18 @@ public class Node {
 
     /**
      * Génère les fils d'un <b>node</b>.
-     * @throws CloneNotSupportedException
      */
-    public void generateChild() throws CloneNotSupportedException{
+    public void generateChild() {
         List<Couple> listEmptyCell = boardConfig.getEmptyCell();
         List<Piece> listRemPieces = boardConfig.getPieces();
         for (int i = 0; i < listEmptyCell.size(); i++) {
             for (int j = 0; j < listRemPieces.size(); j++) {
-                Board cloneBoard = (Board) this.getBoard().clone();
+                Board cloneBoard = boardConfig.copy();
                 Move move = new Move(listEmptyCell.get(i).getX(), listEmptyCell.get(i).getY(), listRemPieces.get(j));
                 cloneBoard.playMove(move);
-                this.nodes.add(new Node(who * -1, cloneBoard, move));
+                Node n = new Node(who * -1, cloneBoard, move);
+                System.out.println(move);
+                this.nodes.add(n);
             }
         }
     }

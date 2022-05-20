@@ -6,16 +6,18 @@ import model.Board;
 import model.Couple;
 import model.Piece;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Tree {
 
     private Node rootNode;
 
-    public Tree () throws CloneNotSupportedException {
+    public Tree (){
 
         Board board = new Board();
         board.setPiece(Piece.SMALL_SQUARE_HOLLOW_YELLOW, 0, 1);
+//        Board firstCopy = board.copy();
         board.setPiece(Piece.SMALL_SQUARE_HOLLOW_BROWN, 1, 0);
         board.setPiece(Piece.SMALL_SQUARE_FIELD_YELLOW, 2, 2);
         board.setPiece(Piece.SMALL_SQUARE_FIELD_BROWN, 3, 1);
@@ -33,17 +35,17 @@ public class Tree {
         board.setPiece(Piece.BIG_ROUND_HOLLOW_YELLOW, 2, 3);
         board.setPiece(Piece.BIG_ROUND_HOLLOW_BROWN, 3, 2);
 
-        //Noeud root
-        rootNode = new Node(1, board);
+//        Noeud root
+        rootNode = new Node(-1, board);
 
-        System.out.println("minimax : " + new Minimax().minimax(3, rootNode));
+        System.out.println("minimax : " + new Minimax().minimax(5, rootNode));
     }
 
     public Node getNode(){
         return rootNode;
     }
 
-    public static void main(String[] args) throws CloneNotSupportedException {
+    public static void main(String[] args) {
         new Tree();
     }
 }
