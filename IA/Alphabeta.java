@@ -1,14 +1,19 @@
 package IA;
 
 import model.Couple;
+import model.Player;
 import tree.Node;
 
 import java.util.List;
 
-public class Alphabeta {
+public class Alphabeta extends Player implements Algorithm {
 
+    @Override
+    public double run(Node node, int depth) {
+        return alphaBeta(node, Double.NEGATIVE_INFINITY,Double.POSITIVE_INFINITY,depth);
+    }
 
-    public double alphaBeta(Node node, double alpha, double beta, int depth){
+    private double alphaBeta(Node node, double alpha, double beta, int depth){
         node.generateChild();
         //Leaf
         if (depth == 0 || node.isLeaf()) {

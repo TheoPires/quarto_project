@@ -14,6 +14,9 @@ public class Game {
     private Board board;
     private List<Move> movesPlay;
     private Piece selectedPiece;
+    private Player player1;
+    private Player player2;
+    private Player currentPlayer;
 
     private boolean needSelectedPiece;
     private boolean needPlacePiece;
@@ -63,6 +66,10 @@ public class Game {
         init();
         needSelectedPiece = true;
         needPlacePiece = false;
+        /*player1 = controller.createPlayer();
+        while(!isGameFinish()){
+
+        }*/
 
     }
 

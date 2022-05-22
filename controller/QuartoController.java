@@ -3,6 +3,8 @@ package controller;
 import model.Game;
 import model.Move;
 import model.Piece;
+import model.Player;
+import view.PlayerLabel;
 import view.QuartoView;
 
 import java.util.List;
@@ -55,6 +57,10 @@ public class QuartoController
 
 
     }
+    /*public Player createPlayer(){
+        PlayerLabel[] pl = view.initPlayer();
+        return null;
+    }*/
 
     public void newGame(){
         game.newGame();

@@ -1,9 +1,6 @@
 package tree;
 
-import IA.Alphabeta;
-import IA.Heuristic;
-import IA.Minimax;
-import IA.Negamax;
+import IA.*;
 import model.Board;
 import model.Couple;
 import model.Piece;
@@ -37,12 +34,25 @@ public class Tree {
         board.setPiece(Piece.BIG_ROUND_HOLLOW_YELLOW, 2, 3);
         board.setPiece(Piece.BIG_ROUND_HOLLOW_BROWN, 3, 2);
 
-//        Noeud root
-        rootNode = new Node(-1, null, board);
+        Node rootNode1 = new Node(1, null, board);
+        Node rootNode2 = new Node(-1, null, board.copy());
+        System.out.println("Minimax(MAX) : " + new Minimax().run(rootNode1, 5));
+        System.out.println("Minimax(MIN) : " + new Minimax().run(rootNode2, 5));
 
-//        System.out.println("minimax : " + new Minimax().minimax(5, rootNode));
-//        System.out.println("negamax : " + new Negamax().negamax(5, rootNode));
-//        System.out.println("alphaBeta : " + new Alphabeta().alphaBeta(rootNode,Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,3));
+        rootNode1 = new Node(1, null, board);
+        rootNode2 = new Node(-1, null, board.copy());
+        System.out.println("Negamax(MAX) : " + new Negamax().run(rootNode1, 5));
+        System.out.println("Negamax(MIN) : " + new Negamax().run(rootNode2, 5));
+
+        rootNode1 = new Node(1, null, board);
+        rootNode2 = new Node(-1, null, board.copy());
+        System.out.println("AlphaBeta(MAX) : " + new Alphabeta().run(rootNode1, 5));
+        System.out.println("AlphaBeta(MIN) : " + new Alphabeta().run(rootNode2, 5));
+
+//        rootNode1 = new Node(1, null, board);
+//        rootNode2 = new Node(-1, null, board.copy());
+//        System.out.println("SSS*(MAX) : " + new SSSstar().run(rootNode1, 5));
+//        System.out.println("SSS*(MIN) : " + new SSSstar().run(rootNode2, 5));
     }
 
     public Node getNode(){

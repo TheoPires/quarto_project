@@ -115,4 +115,9 @@ public class QuartoView {
     public void addHistoryPlace(int x, int y){
         infoPanel.addHistoryPlace(x,y);
     }
+
+    /*public PlayerLabel[] initPlayer(){
+        setupPlayerPanel();
+        return new PlayerLabel[] {player0,player1};
+    }*/
 }
