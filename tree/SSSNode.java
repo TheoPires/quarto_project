@@ -5,7 +5,7 @@ import model.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Node {
+public class SSSNode {
 
     private static int numberGenerate = 1;
 
@@ -15,35 +15,39 @@ public class Node {
     protected Board boardConfig;
     private Move moveTodo;
     private Double weight;
-    protected List<Node> nodes;
+    protected List<SSSNode> sssNodes;
+    private SSSNode parent;
+    private boolean isExplored;
     private int depth;
-    private Node parent;
 
     //Constructors
 
-    public Node(int who, Node parent, Board board, Move move, int depth) {
+    public SSSNode(int who, SSSNode parent, Board board, Move move, int depth) {
         this.number = numberGenerate++;
         this.who = who;
         this.boardConfig = board;
         this.moveTodo = move;
-        this.nodes = new ArrayList<>();
+        this.sssNodes = new ArrayList<>();
         this.parent = parent;
+        this.isExplored = false;
         this.depth = depth;
     }
 
-    public Node(int who, Node parent, Board board, int depth) {
+    public SSSNode(Node node, int depth){
         this.number = numberGenerate++;
-        this.who = who;
-        this.boardConfig = board;
-        this.nodes = new ArrayList<>();
-        this.parent = parent;
-        this.depth = depth;
+        this.who = node.getWho();
+        this.boardConfig = node.getBoard();
+        this.moveTodo = node.getMove();
+        this.sssNodes = new ArrayList<>();
+        this.parent = (node.getParent()== null)? null : new SSSNode(node.getParent(),depth);
+        this.isExplored = false;
+        this.depth  = depth;
     }
 
 
     //Getter
     public boolean isLeaf(){
-        return this.nodes.isEmpty();
+        return this.sssNodes.isEmpty();
     }
 
     public int getNumber() {
@@ -58,8 +62,8 @@ public class Node {
         return this.who;
     }
 
-    public List<Node> getNodes() {
-        return this.nodes;
+    public List<SSSNode> getSSSNodes() {
+        return this.sssNodes;
     }
 
     public Board getBoard() {
@@ -78,8 +82,16 @@ public class Node {
         return this.getWho() < 0;
     }
 
-    public Node getParent() {
+    public boolean isExplored() {
+        return isExplored;
+    }
+
+    public SSSNode getParent() {
         return this.parent;
+    }
+
+    public int getDepth() {
+        return this.depth;
     }
 
     //Setter
@@ -87,22 +99,32 @@ public class Node {
         this.weight = weight;
     }
 
+    public void setExplored() {
+        isExplored = true;
+    }
+
+    public void decreaseDepth(){
+        if (depth > 0) {
+            this.depth--;
+        }
+    }
+
     //Method
     /**
      * Ajoute en tant que fils le <b>node</b> donné en argument.
      * @param node
      */
-    public void addNode(Node node) {
+    public void addSSSNode(SSSNode node) {
         if(node == null)
             throw new IllegalArgumentException("node must be not null.");
-        this.nodes.add(node);
+        this.sssNodes.add(node);
     }
 
-    public boolean removeNode(Node node) {
+    public boolean removeSSSNode(SSSNode node) {
         if(node == null)
             throw new IllegalArgumentException("node must be not null.");
-        if(this.nodes.contains(node)){
-            this.nodes.remove(node);
+        if(this.sssNodes.contains(node)){
+            this.sssNodes.remove(node);
             return true;
         }else
             throw new IllegalArgumentException("node is not in");
@@ -113,7 +135,7 @@ public class Node {
      * Génère les fils d'un <b>node</b>.
      */
     public void generateChild() {
-        if (depth > 0){
+        if(depth > 0) {
             List<Couple> listEmptyCell = boardConfig.getEmptyCell();
             List<Piece> listRemPieces = boardConfig.getPieces();
             for (int i = 0; i < listEmptyCell.size(); i++) {
@@ -121,8 +143,8 @@ public class Node {
                     Board cloneBoard = boardConfig.copy();
                     Move move = new Move(listEmptyCell.get(i).getX(), listEmptyCell.get(i).getY(), listRemPieces.get(j));
                     cloneBoard.playMove(move);
-                    Node n = new Node(who * -1, this, cloneBoard, move, this.depth - 1);
-                    this.nodes.add(n);
+                    SSSNode n = new SSSNode(who * -1, this, cloneBoard, move, depth - 1);
+                    this.sssNodes.add(n);
                 }
             }
         }
@@ -133,7 +155,7 @@ public class Node {
         StringBuilder result = new StringBuilder("[" + this.number + "]");
         if(!isLeaf()) {
             result.append(" -> {");
-            for(Node n : this.nodes)
+            for(SSSNode n : this.sssNodes)
                 result.append(n.toString());
             result.append("} ");
         }

@@ -16,7 +16,6 @@ public class Tree {
 
         Board board = new Board();
         board.setPiece(Piece.SMALL_SQUARE_HOLLOW_YELLOW, 0, 1);
-//        Board firstCopy = board.copy();
         board.setPiece(Piece.SMALL_SQUARE_HOLLOW_BROWN, 1, 0);
         board.setPiece(Piece.SMALL_SQUARE_FIELD_YELLOW, 2, 2);
         board.setPiece(Piece.SMALL_SQUARE_FIELD_BROWN, 3, 1);
@@ -32,27 +31,30 @@ public class Tree {
         board.setPiece(Piece.BIG_SQUARE_FIELD_BROWN, 2, 1);
 
         board.setPiece(Piece.BIG_ROUND_HOLLOW_YELLOW, 2, 3);
-        board.setPiece(Piece.BIG_ROUND_HOLLOW_BROWN, 3, 2);
+//        board.setPiece(Piece.BIG_ROUND_HOLLOW_BROWN, 3, 2);
+//        board.setPiece(Piece.BIG_ROUND_FIELD_YELLOW, 1, 2);
 
-        Node rootNode1 = new Node(1, null, board);
-        Node rootNode2 = new Node(-1, null, board.copy());
-        System.out.println("Minimax(MAX) : " + new Minimax().run(rootNode1, 5));
-        System.out.println("Minimax(MIN) : " + new Minimax().run(rootNode2, 5));
+        int depth = 5;
 
-        rootNode1 = new Node(1, null, board);
-        rootNode2 = new Node(-1, null, board.copy());
-        System.out.println("Negamax(MAX) : " + new Negamax().run(rootNode1, 5));
-        System.out.println("Negamax(MIN) : " + new Negamax().run(rootNode2, 5));
+        Node rootNode1 = new Node(1, null, board, depth);
+        Node rootNode2 = new Node(-1, null, board.copy(),depth);
+        System.out.println("Minimax(MAX) : " + new Minimax().run(rootNode1, depth));
+        System.out.println("Minimax(MIN) : " + new Minimax().run(rootNode2, depth));
 
-        rootNode1 = new Node(1, null, board);
-        rootNode2 = new Node(-1, null, board.copy());
-        System.out.println("AlphaBeta(MAX) : " + new Alphabeta().run(rootNode1, 5));
-        System.out.println("AlphaBeta(MIN) : " + new Alphabeta().run(rootNode2, 5));
+        rootNode1 = new Node(1, null, board, depth);
+        rootNode2 = new Node(-1, null, board.copy(), depth);
+        System.out.println("Negamax(MAX) : " + new Negamax().run(rootNode1, depth));
+        System.out.println("Negamax(MIN) : " + new Negamax().run(rootNode2, depth));
 
-//        rootNode1 = new Node(1, null, board);
-//        rootNode2 = new Node(-1, null, board.copy());
-//        System.out.println("SSS*(MAX) : " + new SSSstar().run(rootNode1, 5));
-//        System.out.println("SSS*(MIN) : " + new SSSstar().run(rootNode2, 5));
+        rootNode1 = new Node(1, null, board, depth);
+        rootNode2 = new Node(-1, null, board.copy(), depth);
+        System.out.println("AlphaBeta(MAX) : " + new Alphabeta().run(rootNode1, depth));
+        System.out.println("AlphaBeta(MIN) : " + new Alphabeta().run(rootNode2, depth));
+
+        rootNode1 = new Node(1, null, board, depth);
+        rootNode2 = new Node(-1, null, board.copy(), depth);
+        System.out.println("SSS*(MAX) : " + new SSSstar().run(rootNode1, depth));
+        System.out.println("SSS*(MIN) : " + new SSSstar().run(rootNode2, depth));
     }
 
     public Node getNode(){
