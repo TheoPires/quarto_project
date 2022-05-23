@@ -40,7 +40,6 @@ public class Node {
         this.depth = depth;
     }
 
-
     //Getter
     public boolean isLeaf(){
         return this.nodes.isEmpty();
@@ -107,6 +106,12 @@ public class Node {
         }else
             throw new IllegalArgumentException("node is not in");
 
+    }
+    /**
+     * Restart counter of node number.
+     */
+    public static void init() {
+        numberGenerate = 1;
     }
 
     /**

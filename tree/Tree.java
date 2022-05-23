@@ -2,15 +2,10 @@ package tree;
 
 import IA.*;
 import model.Board;
-import model.Couple;
 import model.Piece;
 
-import java.awt.*;
-import java.util.ArrayList;
 
 public class Tree {
-
-    private Node rootNode;
 
     public Tree (){
 
@@ -31,7 +26,7 @@ public class Tree {
         board.setPiece(Piece.BIG_SQUARE_FIELD_BROWN, 2, 1);
 
         board.setPiece(Piece.BIG_ROUND_HOLLOW_YELLOW, 2, 3);
-//        board.setPiece(Piece.BIG_ROUND_HOLLOW_BROWN, 3, 2);
+        board.setPiece(Piece.BIG_ROUND_HOLLOW_BROWN, 3, 2);
 //        board.setPiece(Piece.BIG_ROUND_FIELD_YELLOW, 1, 2);
 
         int depth = 5;
@@ -55,10 +50,6 @@ public class Tree {
         rootNode2 = new Node(-1, null, board.copy(), depth);
         System.out.println("SSS*(MAX) : " + new SSSstar().run(rootNode1, depth));
         System.out.println("SSS*(MIN) : " + new SSSstar().run(rootNode2, depth));
-    }
-
-    public Node getNode(){
-        return rootNode;
     }
 
     public static void main(String[] args) {

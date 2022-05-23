@@ -5,14 +5,16 @@ import model.Player;
 import tree.Node;
 import tree.SSSNode;
 
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.PriorityQueue;
 
 public class SSSstar extends Player implements Algorithm {
 
     private Node rootNode;
-    private PriorityQueue<Entity> priorityQueue;
+    private ArrayList<Entity> priorityQueue;
 
     public double run(Node node, int depth){
 
@@ -21,12 +23,13 @@ public class SSSstar extends Player implements Algorithm {
 
     public double sssStar(SSSNode node){
         //Depth in execution
-        this.priorityQueue = new PriorityQueue<>();
-        priorityQueue.add(new Entity(node,'v',Double.POSITIVE_INFINITY));
+        this.priorityQueue = new ArrayList<>();
+        insertEntity(new Entity(node,'v',Double.POSITIVE_INFINITY));
         int n = node.getNumber();
         Entity current;
         do{
-            current = priorityQueue.poll();
+            //System.out.println("-------------------------------");
+            current = priorityQueue.remove(0);
             current.getNode().setExplored();
             //System.out.println(priorityQueue);
             if(current != null && current.isALive()) {
@@ -39,20 +42,29 @@ public class SSSstar extends Player implements Algorithm {
                     current.getNode().setWeight(weight);
                     current.setRevolve();
                     current.setValue(Double.min(current.getValue(), weight));
+                    //System.out.println("LEAF: "+current.getNode().getNumber());
                     insertEntity(current);
                 } else {
                     if(current.getNode().isMax()){
+                       // System.out.print("MAX NODE: "+current.getNode().getNumber()+" : ");
                         for(SSSNode succ : current.getNode().getSSSNodes()){
                             insertEntity(new Entity(succ,'v',current.getValue()));
+                            //System.out.print(succ.getNumber()+", ");
                         }
+                        //System.out.println();
                     } else {
                         //Insert the first left child not explored
+                        //System.out.print("MIN NODE: "+current.getNode().getNumber()+" : ");
                         for (SSSNode succ : current.getNode().getSSSNodes()) {
-                            if (!succ.isExplored())
+                            if (!succ.isExplored()) {
                                 insertEntity(new Entity(succ, 'v', current.getValue()));
+                                break;
+                            }
                         }
+                        //System.out.println();
                     }
                 }
+                //System.out.println(priorityQueue);
             }else if (current != null){ //current est résolu
                 if (current.getNode().isMin()){
                     Entity parent = new Entity(current.getNode().getParent(),'r', current.getValue());
@@ -81,7 +93,7 @@ public class SSSstar extends Player implements Algorithm {
                 throw new RuntimeException("Error get head of PriorityQueue: current is null.");
             }
 
-        }while(priorityQueue.peek().getNode().getNumber() != n);
+        }while(priorityQueue.size() > 0 && priorityQueue.get(0).getNode().getNumber() != n);
         return current.getValue();
     }
 
@@ -139,11 +151,22 @@ public class SSSstar extends Player implements Algorithm {
     }
 
     private void insertEntity(Entity ent){
-        this.priorityQueue.add(ent);
+        int insertIndex = priorityQueue.size();
+        if(priorityQueue.size() != 0){
+            for (int i = 1; i < priorityQueue.size(); i++) {
+                if (ent.getValue() > priorityQueue.get(i).getValue()) {
+                    insertIndex = i;
+                    break;
+                }else{
+                    insertIndex = i+1;
+                }
+            }
+        }
+        this.priorityQueue.add(insertIndex,ent);
     }
 
 
-    private class Entity implements Comparable{
+    private class Entity{
         private SSSNode node;
         private char type;
         private double value;
@@ -151,15 +174,6 @@ public class SSSstar extends Player implements Algorithm {
             this.node = node;
             this.type = type;
             this.value = value;
-        }
-
-        @Override
-        //Permet de définir l'ordre décroissant dans la file de priorité
-        public int compareTo(Object o) {
-            Entity compareToEmp = (Entity) o;
-            if (this.value == compareToEmp.value) return 0;
-            if (this.value < compareToEmp.value) return 1;
-            return -1;
         }
         //REQUEST
 

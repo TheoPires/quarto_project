@@ -10,6 +10,7 @@ public class Alphabeta extends Player implements Algorithm {
 
     @Override
     public double run(Node node, int depth) {
+        Node.init();
         return alphaBeta(node, Double.NEGATIVE_INFINITY,Double.POSITIVE_INFINITY,depth);
     }
 

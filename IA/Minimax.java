@@ -14,6 +14,7 @@ public class Minimax extends Player implements Algorithm {
      * @return la valeur minimax de l'arbre de racine <b>node</b> et de profondeur <b>depth</b>
      */
     public double run(Node node, int depth){
+        Node.init();
         return minimax(node,depth);
     }
 

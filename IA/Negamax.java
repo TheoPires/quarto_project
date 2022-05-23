@@ -13,6 +13,7 @@ public class Negamax extends Player implements Algorithm {
      */
     @Override
     public double run(Node node, int depth) {
+        Node.init();
         return negamax(node, depth);
     }
     private double negamax(Node node, final int depth){
