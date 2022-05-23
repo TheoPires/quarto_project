@@ -5,11 +5,8 @@ import model.Player;
 import tree.Node;
 import tree.SSSNode;
 
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.PriorityQueue;
 
 public class SSSstar extends Player implements Algorithm {
 
@@ -17,7 +14,7 @@ public class SSSstar extends Player implements Algorithm {
     private ArrayList<Entity> priorityQueue;
 
     public double run(Node node, int depth){
-
+        SSSNode.init();
         return sssStar(new SSSNode(node, depth));
     }
 
@@ -28,9 +25,11 @@ public class SSSstar extends Player implements Algorithm {
         int n = node.getNumber();
         Entity current;
         do{
-            //System.out.println("-------------------------------");
+            System.out.println("-------------------------------");
+            //System.out.println(priorityQueue);
             current = priorityQueue.remove(0);
             current.getNode().setExplored();
+            //System.out.println(current + " ["+current.getNode().getDepth()+"]");
 //            System.out.println("affichage l.34 : " + priorityQueue);
             if(current != null && current.isALive()) {
                 current.getNode().generateChild();
@@ -98,7 +97,7 @@ public class SSSstar extends Player implements Algorithm {
     }
 
     public List<Entity> testPriorityQ(SSSNode n) {
-        priorityQueue = new ArrayList<Entity>();
+        priorityQueue = new ArrayList<>();
         Entity firstEntity = new Entity(n, 'v', Double.POSITIVE_INFINITY);
         Entity scdEntity = new Entity(n, 'r', 23);
         Entity thirdEntity = new Entity(n, 'v', 23);
@@ -153,6 +152,9 @@ public class SSSstar extends Player implements Algorithm {
 //    }
 
     private void removeAllChild(Entity parent){
+        System.out.println("remote all child ("+parent+")");
+        System.out.println(priorityQueue);
+
         for(SSSNode succ : parent.getNode().getSSSNodes()){
             if(parent.isParentOf(succ)){
                 //Remove succ in priotity queue -> if entity node and succ are same
@@ -168,13 +170,14 @@ public class SSSstar extends Player implements Algorithm {
                 }
             }
         }
+        System.out.println(priorityQueue);
     }
 
     private void insertEntity(Entity ent){
         int insertIndex = 0;
         if(priorityQueue.size() > 0){
             for (int i = 0; i < priorityQueue.size(); i++) {
-                if (ent.getValue() >= priorityQueue.get(i).getValue()) {
+                if (ent.getValue() > priorityQueue.get(i).getValue()) {
                     insertIndex = i;
                     break;
                 }else{
@@ -183,6 +186,7 @@ public class SSSstar extends Player implements Algorithm {
             }
         }
         this.priorityQueue.add(insertIndex, ent);
+        System.out.println(priorityQueue);
     }
 
 

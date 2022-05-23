@@ -23,13 +23,13 @@ public class Tree {
         board.setPiece(Piece.BIG_SQUARE_HOLLOW_YELLOW, 0, 2);
         board.setPiece(Piece.BIG_SQUARE_HOLLOW_BROWN, 3, 3);
         board.setPiece(Piece.BIG_SQUARE_FIELD_YELLOW, 2, 0);
-//        board.setPiece(Piece.BIG_SQUARE_FIELD_BROWN, 2, 1);
+        board.setPiece(Piece.BIG_SQUARE_FIELD_BROWN, 2, 1);
 
-//        board.setPiece(Piece.BIG_ROUND_HOLLOW_YELLOW, 2, 3);
+        board.setPiece(Piece.BIG_ROUND_HOLLOW_YELLOW, 2, 3);
 //        board.setPiece(Piece.BIG_ROUND_HOLLOW_BROWN, 3, 2);
 //        board.setPiece(Piece.BIG_ROUND_FIELD_YELLOW, 1, 2);
 
-        int depth = 1;
+        int depth = 3;
 
         Node rootNode1 = new Node(1, null, board, depth);
         Node rootNode2 = new Node(-1, null, board.copy(),depth);

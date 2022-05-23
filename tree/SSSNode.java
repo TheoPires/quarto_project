@@ -44,6 +44,10 @@ public class SSSNode {
         this.depth  = depth;
     }
 
+    public static void init() {
+        numberGenerate = 1;
+    }
+
 
     //Getter
     public boolean isLeaf(){
@@ -144,6 +148,7 @@ public class SSSNode {
                     Move move = new Move(listEmptyCell.get(i).getX(), listEmptyCell.get(i).getY(), listRemPieces.get(j));
                     cloneBoard.playMove(move);
                     SSSNode n = new SSSNode(who * -1, this, cloneBoard, move, depth - 1);
+                    //System.out.println("generate node["+depth+"] : "+n+"["+n.getDepth()+"]");
                     this.sssNodes.add(n);
                 }
             }
