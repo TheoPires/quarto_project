@@ -31,7 +31,7 @@ public class SSSstar extends Player implements Algorithm {
             //System.out.println("-------------------------------");
             current = priorityQueue.remove(0);
             current.getNode().setExplored();
-            //System.out.println(priorityQueue);
+//            System.out.println("affichage l.34 : " + priorityQueue);
             if(current != null && current.isALive()) {
                 current.getNode().generateChild();
                 //ALIVE
@@ -64,7 +64,7 @@ public class SSSstar extends Player implements Algorithm {
                         //System.out.println();
                     }
                 }
-                //System.out.println(priorityQueue);
+//                System.out.println(priorityQueue);
             }else if (current != null){ //current est résolu
                 if (current.getNode().isMin()){
                     Entity parent = new Entity(current.getNode().getParent(),'r', current.getValue());
@@ -95,6 +95,26 @@ public class SSSstar extends Player implements Algorithm {
 
         }while(priorityQueue.size() > 0 && priorityQueue.get(0).getNode().getNumber() != n);
         return current.getValue();
+    }
+
+    public List<Entity> testPriorityQ(SSSNode n) {
+        priorityQueue = new ArrayList<Entity>();
+        Entity firstEntity = new Entity(n, 'v', Double.POSITIVE_INFINITY);
+        Entity scdEntity = new Entity(n, 'r', 23);
+        Entity thirdEntity = new Entity(n, 'v', 23);
+        Entity fourthEntity = new Entity(n, 'v', 22);
+        Entity fifthEntity = new Entity(n, 'r', 23);
+        Entity sixEntity = new Entity(n, 'v', 97);
+
+        insertEntity(firstEntity);
+        insertEntity(scdEntity);
+        insertEntity(thirdEntity);
+        insertEntity(fourthEntity);
+        insertEntity(fifthEntity);
+        insertEntity(sixEntity);
+
+
+        return priorityQueue;
     }
 
 //    public double sssStar_TestTheo(SSSNode node, int depth){
@@ -151,10 +171,10 @@ public class SSSstar extends Player implements Algorithm {
     }
 
     private void insertEntity(Entity ent){
-        int insertIndex = priorityQueue.size();
-        if(priorityQueue.size() != 0){
-            for (int i = 1; i < priorityQueue.size(); i++) {
-                if (ent.getValue() > priorityQueue.get(i).getValue()) {
+        int insertIndex = 0;
+        if(priorityQueue.size() > 0){
+            for (int i = 0; i < priorityQueue.size(); i++) {
+                if (ent.getValue() >= priorityQueue.get(i).getValue()) {
                     insertIndex = i;
                     break;
                 }else{
@@ -162,7 +182,7 @@ public class SSSstar extends Player implements Algorithm {
                 }
             }
         }
-        this.priorityQueue.add(insertIndex,ent);
+        this.priorityQueue.add(insertIndex, ent);
     }
 
 
