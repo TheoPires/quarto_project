@@ -1,6 +1,8 @@
+package model;
+
 import java.awt.Color;
 
-public enum Pieces {
+public enum Piece {
 	SMALL_SQUARE_HOLLOW_YELLOW(false, "SQUARE", true, Color.YELLOW),
 	SMALL_SQUARE_HOLLOW_BROWN(false, "SQUARE", true, new Color(102,51,0)),
 	SMALL_SQUARE_FIELD_YELLOW(false, "SQUARE", false, Color.YELLOW),
@@ -18,18 +20,48 @@ public enum Pieces {
 	
 	BIG_ROUND_HOLLOW_YELLOW(true, "ROUND", true, Color.YELLOW),
 	BIG_ROUND_HOLLOW_BROWN(true, "ROUND", true, new Color(102,51,0)),
-	BIG_ROUND_FIELD_YELLOW(true, "ROUND", true, Color.YELLOW),
-	BIG_ROUND_FIELD_BROWN(true, "ROUND", true, new Color(102,51,0));
-	
+	BIG_ROUND_FIELD_YELLOW(true, "ROUND", false, Color.YELLOW),
+	BIG_ROUND_FIELD_BROWN(true, "ROUND", false, new Color(102,51,0));
+
+
 	private boolean big;
 	private boolean hollow;
 	private Color color;
 	private String form;
 
-	Pieces(boolean big, String form, boolean hollow, Color color) {
+	Piece(boolean big, String form, boolean hollow, Color color) {
 		this.big = big;
 		this.form = form;
 		this.hollow = hollow;
 		this.color = color;
+	}
+
+	public boolean isBig() {
+		return big;
+	}
+
+	public boolean isHollow() {
+		return hollow;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public String getForm() {
+		return form;
+	}
+
+	public String getNameImage(){
+		String result = "";
+		result+=(isBig())?"big_":"sml_";
+		result+=(getForm().equals("SQUARE"))?"sqr_":"cir_";
+		result+=(isHollow())?"hlw_":"fld_";
+		result+=(getColor().equals(Color.YELLOW))?"ylw":"bwn";
+		return result;
+	}
+
+	public boolean haveOneCaracteristicsInCommun(Piece piece){
+		return false;
 	}
 }
