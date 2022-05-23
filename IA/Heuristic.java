@@ -78,6 +78,85 @@ public class Heuristic {
         return result;
     }
 
+    public static int heuristicLVL2(Board board, int row, int column, Piece testedPiece) {
+        List<Couple> allPossibilities = new ArrayList<>();
+        allPossibilities.add(new Couple(0,0));
+        allPossibilities.add(new Couple(0,1));
+        allPossibilities.add(new Couple(1,0));
+        allPossibilities.add(new Couple(1,1));
+        allPossibilities.add(new Couple(0,-1));
+        allPossibilities.add(new Couple(-1,0));
+        allPossibilities.add(new Couple(-1,-1));
+        allPossibilities.add(new Couple(-1,1));
+        allPossibilities.add(new Couple(1,-1));
+        System.out.println("allPossibilities : " + allPossibilities);
+        return calculHeuristic(board,row,column,testedPiece,allPossibilities);
+    }
+
+    public static int heuristicLVL3(Board board, int row, int column, Piece testedPiece) {
+        List<Couple> allPossibilities = new ArrayList<>();
+        allPossibilities.add(new Couple(0,0));
+        allPossibilities.add(new Couple(0,2));
+        allPossibilities.add(new Couple(2,0));
+        allPossibilities.add(new Couple(2,2));
+        allPossibilities.add(new Couple(0,-2));
+        allPossibilities.add(new Couple(-2,0));
+        allPossibilities.add(new Couple(-2,-2));
+        allPossibilities.add(new Couple(-2,2));
+        allPossibilities.add(new Couple(2,-2));
+        System.out.println("allPossibilities : " + allPossibilities);
+        return calculHeuristic(board,row,column,testedPiece,allPossibilities);
+    }
+
+    public static int heuristicLVL4(Board board, int row, int column, Piece testedPiece) {
+        if (row > 3 || column > 3) {
+            return 0;
+        }
+        List<Couple> allPossibilities = new ArrayList<>();
+        allPossibilities.add(new Couple(0,0));
+        allPossibilities.add(new Couple(0,1));
+        allPossibilities.add(new Couple(1,0));
+        allPossibilities.add(new Couple(1,1));
+        allPossibilities.add(new Couple(0,-1));
+        allPossibilities.add(new Couple(-1,0));
+        allPossibilities.add(new Couple(-1,-1));
+        allPossibilities.add(new Couple(-1,1));
+        allPossibilities.add(new Couple(1,-1));
+        System.out.println("allPossibilities : " + allPossibilities);
+        return calculHeuristic(board,row,column,testedPiece,allPossibilities);
+    }
+
+    public static int calculHeuristic(Board board, int row, int column, Piece testedPiece, List<Couple> allPossibilities) {
+        if (row > 3 || column > 3) {
+            return 0;
+        }
+        ArrayList<Couple> remove = new ArrayList<>();
+        allPossibilities.removeIf(couple -> {
+            if(!isLegal(board, row + couple.getX(), column + couple.getY())){
+                remove.add(couple);
+                return true;
+            }
+            return false;
+        });
+        allPossibilities.removeAll(remove);
+        System.out.println("allPossibilities after remove : " + allPossibilities);
+
+        int result = 0;
+        for (Couple c : allPossibilities) {
+            Piece p = board.getPiece(row + c.getX(), column + c.getY());
+            if (p == null) {
+                result += 1;
+            } else {
+                result += compareTwoPiece(p, testedPiece);
+            }
+        }
+        return result;
+    }
+
+    private static boolean isLegal(Board b, int row, int column) {
+        return 0 <= row && row < b.getSIZE() && 0 <= column && column < b.getSIZE();
+    }
+
     private static int compareTwoPiece(Piece firstPiece, Piece secondPiece) {
         int result = 0;
         if (firstPiece != null && firstPiece != secondPiece) {

@@ -21,6 +21,7 @@ public class SSSstar extends Player implements Algorithm {
                 return succ.getMove();
         return null;
     }
+
     public double run(Node node, int depth){
         SSSNode.init();
         return sssStar(new SSSNode(node, depth));

@@ -60,4 +60,8 @@ public class Minimax extends Player implements Algorithm {
         return val;
     }
 
+    @Override
+    public String toString() {
+        return "Minimax";
+    }
 }

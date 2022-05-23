@@ -42,6 +42,7 @@ public class SSSNode {
         this.parent = (node.getParent()== null)? null : new SSSNode(node.getParent(),depth);
         this.isExplored = false;
         this.depth  = depth;
+        this.weight = node.getWeight();
     }
 
     public static void init() {
@@ -50,6 +51,8 @@ public class SSSNode {
 
 
     //Getter
+
+
     public boolean isLeaf(){
         return this.sssNodes.isEmpty();
     }
