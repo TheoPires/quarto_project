@@ -81,7 +81,7 @@ public class Board{
             }
         }else if(x+y == 3){
             for(int i=3,j=0; i>=0; i--,j++){
-                System.out.println(i+" "+j);
+                //System.out.println(i+" "+j);
                 result.add(board[i][j]);
             }
         }

@@ -1,7 +1,6 @@
 package IA;
 
-import model.Couple;
-import model.Player;
+import model.*;
 import tree.Node;
 import tree.SSSNode;
 
@@ -13,6 +12,15 @@ public class SSSstar extends Player implements Algorithm {
     private Node rootNode;
     private ArrayList<Entity> priorityQueue;
 
+    @Override
+    protected Move play(Board board, Piece selectedPiece) {
+        Node n = new Node(1, null, board, DEPTH);
+        double minimaxValue = run(n,DEPTH);
+        for(Node succ : n.getNodes())
+            if(succ.getWeight() == minimaxValue)
+                return succ.getMove();
+        return null;
+    }
     public double run(Node node, int depth){
         SSSNode.init();
         return sssStar(new SSSNode(node, depth));
@@ -25,12 +33,12 @@ public class SSSstar extends Player implements Algorithm {
         int n = node.getNumber();
         Entity current;
         do{
-            System.out.println("-------------------------------");
+//            System.out.println("-------------------------------");
             //System.out.println(priorityQueue);
             current = priorityQueue.remove(0);
             current.getNode().setExplored();
             //System.out.println(current + " ["+current.getNode().getDepth()+"]");
-//            System.out.println("affichage l.34 : " + priorityQueue);
+//            System.out.println("affichage l.33 : " + priorityQueue);
             if(current != null && current.isALive()) {
                 current.getNode().generateChild();
                 //ALIVE
@@ -45,7 +53,7 @@ public class SSSstar extends Player implements Algorithm {
                     insertEntity(current);
                 } else {
                     if(current.getNode().isMax()){
-                       // System.out.print("MAX NODE: "+current.getNode().getNumber()+" : ");
+                        // System.out.print("MAX NODE: "+current.getNode().getNumber()+" : ");
                         for(SSSNode succ : current.getNode().getSSSNodes()){
                             insertEntity(new Entity(succ,'v',current.getValue()));
                             //System.out.print(succ.getNumber()+", ");
@@ -67,8 +75,8 @@ public class SSSstar extends Player implements Algorithm {
             }else if (current != null){ //current est résolu
                 if (current.getNode().isMin()){
                     Entity parent = new Entity(current.getNode().getParent(),'r', current.getValue());
-                    insertEntity(parent);
                     removeAllChild(parent);
+                    insertEntity(parent);
                 }else{
                     //Get all brothers
                     List<SSSNode> brothers = current.getNode().getParent().getSSSNodes();
@@ -151,26 +159,78 @@ public class SSSstar extends Player implements Algorithm {
 //        return 0;
 //    }
 
-    private void removeAllChild(Entity parent){
-        System.out.println("remote all child ("+parent+")");
+    public void testRemoveAllChild() {
+        priorityQueue = new ArrayList<>();
+
+        SSSNode root= new SSSNode(1,null, null,null,3);
+        Entity rootEnt = new Entity(root,'v',Double.POSITIVE_INFINITY);//1
+        priorityQueue.add(rootEnt);
+
+        SSSNode n1= new SSSNode(-1,root, null,null,2);
+        SSSNode n2= new SSSNode(-1,root, null,null,2);
+        SSSNode n3= new SSSNode(-1,root, null,null,2);
+        root.addSSSNode(n1);
+        root.addSSSNode(n2);
+        root.addSSSNode(n3);
+        Entity n1Ent = new Entity(n1,'v',Double.POSITIVE_INFINITY);//2
+        Entity n2Ent = new Entity(n2,'v',Double.POSITIVE_INFINITY);//3
+        Entity n3Ent = new Entity(n3,'v',Double.POSITIVE_INFINITY);//4
+        priorityQueue.add(n1Ent);
+        priorityQueue.add(n2Ent);
+        priorityQueue.add(n3Ent);
+
+
+        SSSNode n11= new SSSNode(1,n1, null,null,1);
+        SSSNode n12= new SSSNode(1,n1, null,null,1);
+        n1.addSSSNode(n11);
+        n1.addSSSNode(n12);
+        Entity n11Ent = new Entity(n11,'v',Double.POSITIVE_INFINITY);//5
+        Entity n12Ent = new Entity(n12,'v',Double.POSITIVE_INFINITY);//6
+        priorityQueue.add(n11Ent);
+        priorityQueue.add(n12Ent);
+
+        SSSNode n21= new SSSNode(1,n2, null,null,1);
+        SSSNode n22= new SSSNode(1,n2, null,null,1);
+        n2.addSSSNode(n21);
+        n2.addSSSNode(n22);
+        Entity n21Ent = new Entity(n21,'v',Double.POSITIVE_INFINITY);//7
+        Entity n22Ent = new Entity(n22,'v',Double.POSITIVE_INFINITY);//8
+        priorityQueue.add(n21Ent);
+        priorityQueue.add(n22Ent);
+
+        SSSNode n31= new SSSNode(1,n3, null,null,1);
+        SSSNode n32= new SSSNode(1,n3, null,null,1);
+        n3.addSSSNode(n31);
+        n3.addSSSNode(n32);
+        Entity n31Ent = new Entity(n31,'v',Double.POSITIVE_INFINITY);//9
+        Entity n32Ent = new Entity(n32,'v',Double.POSITIVE_INFINITY);//10
+        priorityQueue.add(n31Ent);
+        priorityQueue.add(n32Ent);
+
+        System.out.println("Full Priority Queue :");
         System.out.println(priorityQueue);
+        removeAllChild(n2Ent);
+//        removeAllChild(n3Ent);
+        System.out.println("Removed node Priority Queue :");
+        System.out.println(priorityQueue);
+    }
+
+    private void removeAllChild(Entity parent){
 
         for(SSSNode succ : parent.getNode().getSSSNodes()){
-            if(parent.isParentOf(succ)){
-                //Remove succ in priotity queue -> if entity node and succ are same
-                List<Entity> removed = new ArrayList<>();
-                priorityQueue.removeIf(entity -> {
-                    if(entity.getNode().equals(succ)){
-                        removed.add(entity);
-                    }
-                    return entity.getNode().equals(succ);
-                });
-                for(Entity e : removed) {
-                    removeAllChild(e);
+            //Remove succ in priotity queue -> if entity node and succ are same
+            List<Entity> removed = new ArrayList<>();
+            priorityQueue.removeIf(entity -> {
+                if(entity.getNode().equals(succ)){
+                    removed.add(entity);
+                    return true;
                 }
+                return false;
+            });
+            for(Entity e : removed) {
+                removeAllChild(e);
             }
         }
-        System.out.println(priorityQueue);
     }
 
     private void insertEntity(Entity ent){
@@ -186,7 +246,7 @@ public class SSSstar extends Player implements Algorithm {
             }
         }
         this.priorityQueue.add(insertIndex, ent);
-        System.out.println(priorityQueue);
+//        System.out.println(priorityQueue);
     }
 
 

@@ -1,11 +1,25 @@
 package IA;
 
-import model.Couple;
-import model.Player;
+import model.*;
 import tree.Node;
 
 //Ajouter méthode de génération dans minimax
 public class Minimax extends Player implements Algorithm {
+
+    public Minimax(int who){
+        this.who = who;
+    }
+
+    @Override
+    protected Move play(Board board, Piece selectedPiece) {
+        Node n = new Node(who, null, board, DEPTH);
+        double minimaxValue = run(n,DEPTH);
+        for(Node succ : n.getNodes())
+            if(succ.getWeight() == minimaxValue)
+                return succ.getMove();
+        return null;
+    }
+
     /**
      * Calcul la valeur minimax d'un à partir d'un <b>node</b> en tant que racine d'un
      * arbre de profondeur <b>depth</b>
@@ -21,7 +35,7 @@ public class Minimax extends Player implements Algorithm {
     private double minimax(Node node, final int depth) {
         node.generateChild();
         //Leaf
-       if (depth == 0 || node.isLeaf()) {
+        if (depth == 0 || node.isLeaf()) {
             Couple tmp = new Couple(node.getMove().getX(), node.getMove().getY());
             node.setWeight(Heuristic.calulateWeight(node.getBoard(),tmp,node.getMove().getPiece()));
             return node.getWeight();

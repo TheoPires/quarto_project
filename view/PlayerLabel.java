@@ -1,12 +1,15 @@
 package view;
 
+import IA.Algorithm;
+import IA.Minimax;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class PlayerLabel extends JLabel
 {
     private String name;
-    private int score = 0;
+    private int score;
 
     /**
      * Constructors a new player that plays the given piece color. Will prompt the user to input a name for this PlayerLabel.
@@ -14,7 +17,7 @@ public class PlayerLabel extends JLabel
      */
     public PlayerLabel(int playerNum)
     {
-        super("", SwingConstants.CENTER);
+        super(playerNum+"", SwingConstants.CENTER);
         setFont( new Font(getFont().getFontName(), Font.PLAIN, 20) );
         setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         name = promptName(playerNum);
@@ -57,6 +60,14 @@ public class PlayerLabel extends JLabel
         name = name.trim().replaceAll("\\s+", " ");// Collapse spaces to one space
         name = name.substring(0, Math.min(name.length(), 12));  // Truncate to length 12
         return name.trim();                                     // Trim it again
+    }
+
+    public void inactive() {
+        this.setForeground(Color.black);
+    }
+
+    public void active() {
+        this.setForeground(Color.red);
     }
 }
 

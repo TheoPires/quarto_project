@@ -33,31 +33,34 @@ public class Tree {
 
         Node rootNode1 = new Node(1, null, board, depth);
         Node rootNode2 = new Node(-1, null, board.copy(),depth);
-        System.out.println("Minimax(MAX) : " + new Minimax().run(rootNode1, depth));
-        System.out.println("Minimax(MIN) : " + new Minimax().run(rootNode2, depth));
-
+        /*System.out.println("Minimax(MAX) : " + new Minimax(1).run(rootNode1, depth));
+        System.out.println("Minimax(MIN) : " + new Minimax(-1).run(rootNode2, depth));
+*/
         rootNode1 = new Node(1, null, board, depth);
         rootNode2 = new Node(-1, null, board.copy(), depth);
-        System.out.println("Negamax(MAX) : " + new Negamax().run(rootNode1, depth));
-        System.out.println("Negamax(MIN) : " + new Negamax().run(rootNode2, depth));
+        System.out.println("Negamax(MAX) : " + new Negamax(1).run(rootNode1, depth));
+        System.out.println("Negamax(MIN) : " + new Negamax(-1).run(rootNode2, depth));
 
-        rootNode1 = new Node(1, null, board, depth);
+  /*      rootNode1 = new Node(1, null, board, depth);
         rootNode2 = new Node(-1, null, board.copy(), depth);
-        System.out.println("AlphaBeta(MAX) : " + new Alphabeta().run(rootNode1, depth));
-        System.out.println("AlphaBeta(MIN) : " + new Alphabeta().run(rootNode2, depth));
+        System.out.println("AlphaBeta(MAX) : " + new Alphabeta(1).run(rootNode1, depth));
+        System.out.println("AlphaBeta(MIN) : " + new Alphabeta(-1).run(rootNode2, depth));
 
         rootNode1 = new Node(1, null, board, depth);
         rootNode2 = new Node(-1, null, board.copy(), depth);
         System.out.println("SSS*(MAX) : " + new SSSstar().run(rootNode1, depth));
         System.out.println("SSS*(MIN) : " + new SSSstar().run(rootNode2, depth));
 
-
+*/
 //        System.out.println("Test priorityQueue :");
 //        SSSNode testNode = new SSSNode(rootNode1, 1);
 //        System.out.println("*** Ordre d\'insertion ***");
 //        System.out.println(new SSSstar().testPriorityQ(testNode));
 //        System.out.println("Résultat attendu :");
 //        System.out.println("[(18, v, Infinity), (18, v, 97.0), (18, r, 23.0), (18, v, 23.0), (18, r, 23.0), (18, v, 22.0)]");
+
+
+
     }
 
     public static void main(String[] args) {

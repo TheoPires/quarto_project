@@ -1,9 +1,11 @@
 package model;
 
-public class Player {
-    //Joueur
+public abstract class Player {
+    protected int who;
 
-    /*public Move play(){
-        //return controller.playerPlay();
-    }*/
+    protected abstract Move play(Board board, Piece selectedPiece);
+
+    public int getWho(){
+        return this.who;
+    }
 }

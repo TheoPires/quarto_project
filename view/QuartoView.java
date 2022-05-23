@@ -1,6 +1,11 @@
 package view;
 
+import IA.Algorithm;
+import IA.Alphabeta;
+import IA.Minimax;
+import IA.Negamax;
 import controller.QuartoController;
+import model.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,9 +22,8 @@ public class QuartoView {
     private PieceListPanel piecePanel;
     private JTextArea txtGameMsg;
 
-
-    private PlayerLabel player0;
-    private PlayerLabel player1;
+    private PlayerLabel[] players = new PlayerLabel[2];
+    private PlayerLabel currentPlayer;
 
     /**
      * Initializes all the components of the GUI and puts them into a JFrame to display.
@@ -56,15 +60,33 @@ public class QuartoView {
         mainFrame.remove(this.gameMsgPanel);
         init();
     }
+    private void initCPUs()
+    {
 
+        if (players[0].getName().toUpperCase().startsWith("IA") || players[0].getName().length() == 0 ) {
+            Player[] modes = {new Minimax(1),new Negamax(1), new Alphabeta(1)};
+            Player iaPlayer = (Player) JOptionPane.showInputDialog(null, "Choose the difficulty of " + players[0].getName(),
+                    "IA difficulty selection", JOptionPane.QUESTION_MESSAGE, null, modes, modes[0]);
+            controller.setPlayer(iaPlayer);
+        }
+        if (players[1].getName().toUpperCase().startsWith("IA") || players[1].getName().length() == 0) {
+            Player[] modes = {new Minimax(-1),new Negamax(-1), new Alphabeta(-1)};
+            Player iaPlayer = (Player) JOptionPane.showInputDialog(null, "Choose the difficulty of " + players[1].getName(),
+                    "IA difficulty selection", JOptionPane.QUESTION_MESSAGE, null, modes, modes[0]);
+            controller.setPlayer(iaPlayer);
+        }
+    }
 
     private void setupPlayerPanel(){
-        player0 = new PlayerLabel(0);
-        player1 = new PlayerLabel(1);
+        players[0] = new PlayerLabel(0);
+        currentPlayer = players[0];
+
+        players[1] = new PlayerLabel(1);
+        initCPUs();
         this.playersPanel = new JPanel();
         this.playersPanel.setLayout(new GridLayout(1,2));
-        this.playersPanel.add(player0);
-        this.playersPanel.add(player1);
+        this.playersPanel.add(players[0]);
+        this.playersPanel.add(players[1]);
     }
     private void setupBoardPanel(){
         this.boardPanel = new BoardPanel(controller.getSizes(),controller,this);
@@ -98,7 +120,6 @@ public class QuartoView {
     public void endGame(){
         JOptionPane.showMessageDialog(new JPanel(),
                     "Fin de la partie.");
-        newGame();
 
     }
 
@@ -116,8 +137,10 @@ public class QuartoView {
         infoPanel.addHistoryPlace(x,y);
     }
 
-    /*public PlayerLabel[] initPlayer(){
-        setupPlayerPanel();
-        return new PlayerLabel[] {player0,player1};
-    }*/
+
+    public void switchPlayer() {
+        currentPlayer.inactive();
+        currentPlayer = (currentPlayer == players[0])?players[1]:players[0];
+        currentPlayer.active();
+    }
 }

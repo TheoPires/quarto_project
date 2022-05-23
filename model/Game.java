@@ -1,5 +1,6 @@
 package model;
 
+import IA.Algorithm;
 import controller.QuartoController;
 
 import java.awt.*;
@@ -14,8 +15,8 @@ public class Game {
     private Board board;
     private List<Move> movesPlay;
     private Piece selectedPiece;
+    private Player player0;
     private Player player1;
-    private Player player2;
     private Player currentPlayer;
 
     private boolean needSelectedPiece;
@@ -50,13 +51,15 @@ public class Game {
 
     //Commandes
     public void play(Move move){
-        System.out.println(move.getPiece()+" "+move.getX()+" "+move.getY());
+        //System.out.println(move.getPiece()+" "+move.getX()+" "+move.getY());
         board.playMove(move);
         movesPlay.add(move);
         selectedPiece = null;
         needSelectedPiece = true;
         needPlacePiece = false;
-
+        //Switch player
+        currentPlayer = (currentPlayer == player0)?player1:player0;
+        controller.switchPlayer();
         if(isFinishedLevel1()){
             controller.endGame();
         }
@@ -66,11 +69,8 @@ public class Game {
         init();
         needSelectedPiece = true;
         needPlacePiece = false;
-        /*player1 = controller.createPlayer();
-        while(!isGameFinish()){
-
-        }*/
-
+        if(currentPlayer instanceof Algorithm)
+            play(currentPlayer.play(board.copy(), selectedPiece));
     }
 
     public void setSelectedPiece(String namePiece){
@@ -81,6 +81,15 @@ public class Game {
         }
         needSelectedPiece = false;
         needPlacePiece = true;
+        if(currentPlayer instanceof Algorithm)
+            play(currentPlayer.play(board.copy(), selectedPiece));
+
+    }
+    public void setPlayer(Player player){
+        if(player0 == null)
+            player0 = player;
+        else if(player1 == null)
+            player1 = player;
     }
 
     public boolean canSelectedNewPiece() {
@@ -90,7 +99,7 @@ public class Game {
         return needPlacePiece;
     }
 
-    public void setPiece(int x, int y){
+    public void setMove(int x, int y){
         play(new Move(x,y,selectedPiece));
     }
 
@@ -110,12 +119,8 @@ public class Game {
 
     private boolean isFinishedLevel1(){
         for(int i = 0; i< getSize();i++){
-            if(haveCaracteristicInCommun(board.getRow(i))){
-                return true;
-            }
-            if(haveCaracteristicInCommun(board.getColumn(i))){
-                return true;
-            }
+            if(haveCaracteristicInCommun(board.getRow(i)))return true;
+            if(haveCaracteristicInCommun(board.getColumn(i)))return true;
         }
 
         if(haveCaracteristicInCommun(board.getDiagonal(0,0))) return true;
@@ -139,13 +144,10 @@ public class Game {
             }
         }
             for(int i = 0; i<temp.length;i++){
-                System.out.print(temp[i]+", ");
+                //System.out.print(temp[i]+", ");
                 if(temp[i] == 4) return true;
             }
-        System.out.println("\n---------------");
+        //System.out.println("\n---------------");
         return false;
-    }
-    public void newGame(){
-        init();
     }
 }
