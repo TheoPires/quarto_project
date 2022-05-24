@@ -7,19 +7,12 @@ import tree.SSSNode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SSSstar extends Player implements Algorithm {
+public class SSSstar extends Algorithm implements Player {
 
-    private Node rootNode;
     private ArrayList<Entity> priorityQueue;
 
-    @Override
-    protected Move play(Board board, Piece selectedPiece) {
-        Node n = new Node(1, null, board, DEPTH);
-        double minimaxValue = run(n,DEPTH);
-        for(Node succ : n.getNodes())
-            if(succ.getWeight() == minimaxValue)
-                return succ.getMove();
-        return null;
+    public SSSstar(int who, String name) {
+        super(who, name);
     }
 
     public double run(Node node, int depth){

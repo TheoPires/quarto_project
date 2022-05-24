@@ -11,22 +11,25 @@ public class InfoPanel extends JPanel {
     private JTabbedPane infoOnglet;
     private JPanel rulesPanel, historyPanel,selectedPiecePanel;
     private JLabel selectedPieceImage;
+    private int level;
 
     private JTextArea historyText;
 
-    public InfoPanel (QuartoController controller){
+    public InfoPanel (QuartoController controller, int level){
         this.controller = controller;
+        this.level = level;
         this.setLayout(new BorderLayout());
         infoOnglet = new JTabbedPane();
 
-        setupRulesPanel();
         setupHistoryPanel();
+        setupRulesPanel();
         setupPieceSelected();
 
         infoOnglet.setBounds(40,20,300,300);
 
-        infoOnglet.add("Règles", rulesPanel);
+
         infoOnglet.add("Historique", historyPanel);
+        infoOnglet.add("Règles", rulesPanel);
 
         this.add(infoOnglet,BorderLayout.CENTER);
         this.add(selectedPiecePanel,BorderLayout.SOUTH);
@@ -34,7 +37,16 @@ public class InfoPanel extends JPanel {
 
     public void setupRulesPanel(){
         rulesPanel = new JPanel();
-        String rules = "Voici les règles du jeu Quarto:\n -Placer des pièces pour effectuer un alignement\n";
+        String rules = ""+Rules.BUT+Rules.GENERAL_RULES;
+        switch (this.level) {
+            case 2 -> rules += "" + Rules.LEVEL1 + Rules.LEVEL2;
+            case 3 -> rules += "" + Rules.LEVEL1 + Rules.LEVEL2 + Rules.LEVEL3;
+            case 4 -> rules += "" + Rules.LEVEL1 + Rules.LEVEL2 + Rules.LEVEL3 + Rules.LEVEL4;
+            default -> {
+                rules += "" + Rules.LEVEL1;
+                this.level = 1;
+            }
+        }
         JTextArea textArea = new JTextArea();
         textArea.append(rules);
         textArea.setEditable(false);

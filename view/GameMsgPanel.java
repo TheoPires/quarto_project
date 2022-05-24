@@ -20,7 +20,7 @@ public class GameMsgPanel extends JPanel {
         txtGameMsg.setText("Début de la partie");
         txtGameMsg.setEditable(false);
         txtGameMsg.setFont(new Font("Serif",Font.BOLD,30));
-        btnStart = new JButton("Commencer une partie");
+        btnStart = new JButton("Commencer la partie");
         btnStart.addActionListener(e ->{
             controller.startGame();
             setTxtSelectPiece();
@@ -37,6 +37,10 @@ public class GameMsgPanel extends JPanel {
     }
     public void setTxtSelectPiece() {
         txtGameMsg.setText("Sélectionner une pièce pour votre adversaire");
+    }
+
+    public void setEndMsg(){
+        txtGameMsg.setText("Merci d'avoir joué avec notre application.");
     }
 
 }

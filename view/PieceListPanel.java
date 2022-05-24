@@ -11,26 +11,21 @@ import java.util.List;
 public class PieceListPanel extends JPanel {
 
     private QuartoController controller;
-    private QuartoView view;
 
-    private List<Piece> lastSave = new ArrayList<>();
 
     private List<SquareButton> buttons = new ArrayList<>();
 
     private int NB_COLOR = 2;
 
-    private SquareButton selectedSquareButton;
 
-    public PieceListPanel(List<Piece> lstPiece,QuartoController controller,QuartoView view){
+    public PieceListPanel(List<Piece> lstPiece,QuartoController controller){
         this.controller = controller;
-        this.view  = view;
         this.setLayout(new GridLayout(lstPiece.size()/NB_COLOR,NB_COLOR,10,10));
-        this.setBackground(Color.white);
+        this.setBackground(Color.red);
         for(int i = 0; i < lstPiece.size();i++){
             this.add(initSquareButton(lstPiece.get(i).getNameImage()));
         }
     }
-
     public SquareButton initSquareButton(String namePiece){
         SquareButton btn = new SquareButton(0,0,Color.WHITE,namePiece);
         buttons.add(btn);
@@ -40,12 +35,8 @@ public class PieceListPanel extends JPanel {
             if (controller.isGameStarted()) {
                 if (controller.canSelectedNewPiece()) {
                         int res = JOptionPane.showConfirmDialog(this, "Etes-vous sur de sélectionner cette pièce?");
-
                         if (res == JOptionPane.YES_OPTION) {
-                            selectedSquareButton = btn;
                             controller.setSelectedPiece(btn.getNamePiece());
-                            view.addHistorySelectedPiece(selectedSquareButton.getNamePiece());
-                            btn.setEnabled(false);
                         }
                 } else {
                     JOptionPane.showMessageDialog(this,
@@ -59,5 +50,28 @@ public class PieceListPanel extends JPanel {
         return btn;
     }
 
+    public void setEnableSquareButton(Piece p){
+        for(SquareButton squareButton : buttons){
+            if(squareButton.getNamePiece().equals(p.getNameImage()))
+                squareButton.setEnabled(true);
+        }
+    }
+    public void setDisableSquareButton(Piece p){
+        for(SquareButton squareButton : buttons){
+            if(squareButton.getNamePiece().equals(p.getNameImage()))
+                squareButton.setEnabled(false);
+        }
+    }
 
+    public void refreshPieces() {
+        List<Piece> pieceNotPlaced = controller.getPieces();
+        for(Piece p : Piece.values()){
+            if(pieceNotPlaced.contains(p)){
+                setEnableSquareButton(p);
+            }else{
+                setDisableSquareButton(p);
+            }
+
+        }
+    }
 }

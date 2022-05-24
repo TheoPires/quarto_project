@@ -5,7 +5,6 @@ import controller.QuartoController;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Game {
@@ -18,6 +17,7 @@ public class Game {
     private Player player0;
     private Player player1;
     private Player currentPlayer;
+    private int level;
 
     private boolean needSelectedPiece;
     private boolean needPlacePiece;
@@ -26,8 +26,9 @@ public class Game {
 
     private int depth;
 
-    public Game(QuartoController controller){
+    public Game(QuartoController controller, int level){
         this.controller = controller;
+        this.level = level;
         init();
     }
 
@@ -52,16 +53,28 @@ public class Game {
     //Commandes
     public void play(Move move){
         //System.out.println(move.getPiece()+" "+move.getX()+" "+move.getY());
+        controller.refresh();
         board.playMove(move);
         movesPlay.add(move);
+        controller.addHistoryPlace(move.getX(), move.getY());
+        controller.refresh();
         selectedPiece = null;
         needSelectedPiece = true;
         needPlacePiece = false;
-        //Switch player
-        currentPlayer = (currentPlayer == player0)?player1:player0;
-        controller.switchPlayer();
-        if(isFinishedLevel1()){
+        System.out.println();
+        if(isGameFinish()){
             controller.endGame();
+        }else {
+            if(currentPlayer instanceof Algorithm) {
+                /*try {
+                    controller.refresh();
+                    //Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }*/
+                setSelectedPiece(((Algorithm)currentPlayer).selectPiece(board.copy()).getNameImage());
+            }else if(currentPlayer != null)
+                controller.setTxtSelectedPiece();
         }
     }
 
@@ -69,27 +82,37 @@ public class Game {
         init();
         needSelectedPiece = true;
         needPlacePiece = false;
+        currentPlayer = player0;
         if(currentPlayer instanceof Algorithm)
-            play(currentPlayer.play(board.copy(), selectedPiece));
+            setSelectedPiece(((Algorithm)currentPlayer).selectPiece(board.copy()).getNameImage());
+        else if(currentPlayer != null)
+            controller.setTxtSelectedPiece();
     }
 
     public void setSelectedPiece(String namePiece){
+        controller.refresh();
         for(Piece p : this.board.getPieces()){
             if(p.getNameImage().equals(namePiece)){
                 selectedPiece = p;
+                controller.addHistorySelectedPiece(p.getNameImage());
+                break;
             }
         }
         needSelectedPiece = false;
         needPlacePiece = true;
+        //Switch player
+        currentPlayer = (currentPlayer == player0)?player1:player0;
+        controller.switchPlayer();
+        controller.refresh();
         if(currentPlayer instanceof Algorithm)
-            play(currentPlayer.play(board.copy(), selectedPiece));
+            play(((Algorithm)currentPlayer).play(board.copy(), selectedPiece));
+        else if(currentPlayer != null)
+            controller.setTxtPlacePiece();
 
     }
-    public void setPlayer(Player player){
-        if(player0 == null)
-            player0 = player;
-        else if(player1 == null)
-            player1 = player;
+    public void setPlayer(Player player,int numPlayer){
+        player0 = (numPlayer == 0)?player:player0;
+        player1 = (numPlayer == 1)?player:player1;
     }
 
     public boolean canSelectedNewPiece() {
@@ -103,30 +126,116 @@ public class Game {
         play(new Move(x,y,selectedPiece));
     }
 
-    public boolean isGameFinish(){
-        return isGameNull()
-                || isFinishedLevel1()
-                /*||  isFinishedLevel2
-                * ||  isFinishedLevel3
-                * ||  isFinishedLevel4
-                * */;
+    public String getCurrentPlayerName(){
+        return currentPlayer.getName();
     }
+    public String getSelectedPieceName(){
+        return (selectedPiece != null)?selectedPiece.getNameImage():null;
+    }
+    public boolean isGameFinish(){
+        return switch (level) {
+            case 1 -> isGameNull()
+                    || isGameFinishLevel1();
+            case 2 -> isGameNull()
+                    || isGameFinishLevel1()
+                    || isGameFinishLevel2();
+            case 3 -> isGameNull()
+                    || isGameFinishLevel1()
+                    || isGameFinishLevel2()
+                    || isGameFinishLevel3();
+            case 4 -> isGameNull()
+                    || isGameFinishLevel1()
+                    || isGameFinishLevel2()
+                    || isGameFinishLevel3()
+                    || isGameFinishLevel4();
+            default -> isGameNull();
+        };
+    }
+
 
     private boolean isGameNull(){
         //true if game isn't finish and not empty cells
         return !isGameFinish && board.getEmptyCell().size() == 0;
     }
 
-    private boolean isFinishedLevel1(){
+    private boolean isGameFinishLevel1(){
         for(int i = 0; i< getSize();i++){
             if(haveCaracteristicInCommun(board.getRow(i)))return true;
             if(haveCaracteristicInCommun(board.getColumn(i)))return true;
         }
-
         if(haveCaracteristicInCommun(board.getDiagonal(0,0))) return true;
         if(haveCaracteristicInCommun(board.getDiagonal(3,0))) return true;
 
         return false;
+    }
+    private boolean isGameFinishLevel2(){
+        for(int i = 0; i < board.getSIZE()-1; i++){
+            for(int j = 0; j < board.getSIZE()-1; j++){
+                System.out.println("i, j : "+i+", "+j);
+                List<Piece> testPiece = new ArrayList<>();
+                testPiece.add(board.getPiece(i,j));
+                testPiece.add(board.getPiece(i, j+1));
+                testPiece.add(board.getPiece(i+1,j));
+                testPiece.add(board.getPiece(i+1,j+1));
+                if(haveCaracteristicInCommun(testPiece)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    private boolean isGameFinishLevel3(){
+        for(int i = 0; i < board.getSIZE(); i++){
+            for(int j = 0; j < board.getSIZE()-1; j++){
+                List<Piece> testPiece = new ArrayList<>();
+                testPiece.add(board.getPiece(i,j));
+                testPiece.add(board.getPiece(i, j+2));
+                testPiece.add(board.getPiece(i+2,j));
+                testPiece.add(board.getPiece(i+2,j+2));
+                if(haveCaracteristicInCommun(testPiece)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isGameFinishLevel4(){
+        boolean isFinished = false;
+        List<Piece> testPiece= new ArrayList<>();
+        testPiece.add(board.getPiece(1, 0));//a2
+        testPiece.add(board.getPiece(0, 1));//b1
+        testPiece.add(board.getPiece(1, 2));//c2
+        testPiece.add(board.getPiece(2, 1));//b3
+
+        isFinished = isFinished || haveCaracteristicInCommun(testPiece);
+
+        testPiece = new ArrayList<>();
+        testPiece.add(board.getPiece(2, 1));//b3
+        testPiece.add(board.getPiece(1,2));//c2
+        testPiece.add(board.getPiece(2, 3));//d3
+        testPiece.add(board.getPiece(3, 2));//c4
+
+        isFinished = isFinished || haveCaracteristicInCommun(testPiece);
+
+        testPiece= new ArrayList<>();
+        testPiece.add(board.getPiece(2, 0)); //a3
+        testPiece.add(board.getPiece(1, 1)); //b2
+        testPiece.add(board.getPiece(3, 1)); //b4
+        testPiece.add(board.getPiece(2, 2)); //c3
+
+        isFinished = isFinished || haveCaracteristicInCommun(testPiece);
+
+        testPiece= new ArrayList<>();
+        testPiece.add(board.getPiece(1, 1));//b2
+        testPiece.add(board.getPiece(0, 2));//c1
+        testPiece.add(board.getPiece(1, 3));//d2
+        testPiece.add(board.getPiece(2, 2));//c3
+
+        isFinished = isFinished || haveCaracteristicInCommun(testPiece);
+
+        return isFinished;
     }
 
 

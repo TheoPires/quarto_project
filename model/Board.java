@@ -106,6 +106,11 @@ public class Board{
         this.getPieces().remove(piece);
     }
 
+    public void removePiece(Piece piece){
+        System.out.println("removed : "+piece);
+        this.getPieces().remove(piece);
+    }
+
     public void playMove(Move move) {
         this.setPiece(move.getPiece(), move.getX(), move.getY());
     }

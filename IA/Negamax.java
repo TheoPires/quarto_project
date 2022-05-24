@@ -3,24 +3,10 @@ package IA;
 import model.*;
 import tree.Node;
 
-public class Negamax extends Player implements Algorithm {
+public class Negamax extends Algorithm implements Player {
 
-    public Negamax(int who){
-        this.who = who;
-    }
-
-    @Override
-    protected Move play(Board board, Piece selectedPiece) {
-        Node n = new Node(who, null, board, DEPTH);
-        double negamax = run(n,DEPTH);
-        System.out.println("val :"+negamax);
-        for(Node succ : n.getNodes()) {
-            System.out.println(succ.getWeight()+" -> "+(succ.getMove() == null));
-            if (succ.getWeight() == -negamax)
-                return succ.getMove();
-        }
-        System.out.println("NOT OK");
-        return null;
+    public Negamax(int who, String name){
+        super(who,name);
     }
     /**
      * Compute the negamax value from a tree with <b>node</b> as root and depth of <b>depth</b>
@@ -33,6 +19,7 @@ public class Negamax extends Player implements Algorithm {
         Node.init();
         return negamax(node, depth);
     }
+
     private double negamax(Node node, final int depth){
         node.generateChild();
         if (depth == 0 || node.isLeaf()) {

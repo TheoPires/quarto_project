@@ -34,7 +34,6 @@ public class BoardPanel extends JPanel {
                         if (controller.canPlaceNewPiece()) {
                             if (sqBtn.haveNamePieceNull()) {
                                 controller.setSelectedPieceSelectedPlace(sqBtn.getRow(), sqBtn.getCol());
-                                view.addHistoryPlace(sqBtn.getRow(),sqBtn.getCol());
                             }else {
                                 JOptionPane.showMessageDialog(this,
                                         "Erreur : Une pièce est déja placée sur cette case.");

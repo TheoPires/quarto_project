@@ -5,25 +5,19 @@ import tree.Node;
 
 import java.util.List;
 
-public class Alphabeta extends Player implements Algorithm {
+public class Alphabeta extends Algorithm implements Player {
 
-    public Alphabeta(int who){
-        this.who = who;
+
+    public Alphabeta(int who, String name){
+        super(who,name);
     }
-    @Override
-    protected Move play(Board board, Piece selectedPiece) {
-        Node n = new Node(1, null, board, DEPTH);
-        double alphaBetaValue = run(n,DEPTH);
-        for(Node succ : n.getNodes())
-            if(succ.getWeight() == alphaBetaValue)
-                return succ.getMove();
-        return null;
-    }
+
     @Override
     public double run(Node node, int depth) {
         Node.init();
         return alphaBeta(node, Double.NEGATIVE_INFINITY,Double.POSITIVE_INFINITY,depth);
     }
+
 
     private double alphaBeta(Node node, double alpha, double beta, int depth){
         node.generateChild();

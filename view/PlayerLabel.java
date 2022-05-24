@@ -21,24 +21,7 @@ public class PlayerLabel extends JLabel
         setFont( new Font(getFont().getFontName(), Font.PLAIN, 20) );
         setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         name = promptName(playerNum);
-        updateScoreLabel();
-    }
-
-    /**
-     * Increments the score of the player and updates the JLabel associated with this PlayerLabel.
-     */
-    public void incrementScore()
-    {
-        score++;
-        updateScoreLabel();
-    }
-
-    /**
-     * Helper function to update the text of the internal JLabel with the new score.
-     */
-    private void updateScoreLabel()
-    {
-        setText(name + " : " + score);
+        setText(name);
     }
 
     public String getName()

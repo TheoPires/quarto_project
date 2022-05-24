@@ -44,16 +44,15 @@ public class QuartoController
 
     public void setSelectedPiece(String namePiece){
         game.setSelectedPiece(namePiece);
-        view.updateSelectedPiece(namePiece);
-        view.setTxtPlacePiece();
         refresh();
 
 
     }
 
     public void newGame(){
-        this.game = new Game(this);
-        this.view = new QuartoView(this);
+        int level = QuartoView.initLevel();
+        this.game = new Game(this, level);
+        this.view = new QuartoView(this, level);
         this.isGameStarted = false;
     }
     public void setSelectedPieceSelectedPlace(int x, int y){
@@ -61,14 +60,35 @@ public class QuartoController
         game.setMove(x,y);
         refresh();
     }
-    public void setPlayer(Player player){
-        game.setPlayer(player);
+    public void setTxtPlacePiece(){
+        view.setTxtPlacePiece();
+        refresh();
+    }
+    public void setTxtSelectedPiece(){
+        view.setTxtSelectPiece();
+        refresh();
+    }
+    public void setPlayer(Player player,int numPlayer){
+        game.setPlayer(player, numPlayer);
     }
 
     public void endGame(){
         view.endGame();
-        isGameStarted = false;
+    }
 
+    public String getSelectedPieceName(){
+        return game.getSelectedPieceName();
+    }
+
+    public String getCurrentPlayerName(){
+        return game.getCurrentPlayerName();
+    }
+
+    public void addHistoryPlace(int x, int y){
+        view.addHistoryPlace(x,y);
+    }
+    public void addHistorySelectedPiece(String namePiece){
+        view.addHistorySelectedPiece(namePiece);
     }
 
     public boolean canSelectedNewPiece(){

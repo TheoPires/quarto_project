@@ -3,22 +3,16 @@ package IA;
 import model.*;
 import tree.Node;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //Ajouter méthode de génération dans minimax
-public class Minimax extends Player implements Algorithm {
+public class Minimax extends Algorithm implements Player {
 
-    public Minimax(int who){
-        this.who = who;
+    public Minimax(int who, String name){
+        super(who, name);
     }
 
-    @Override
-    protected Move play(Board board, Piece selectedPiece) {
-        Node n = new Node(who, null, board, DEPTH);
-        double minimaxValue = run(n,DEPTH);
-        for(Node succ : n.getNodes())
-            if(succ.getWeight() == minimaxValue)
-                return succ.getMove();
-        return null;
-    }
 
     /**
      * Calcul la valeur minimax d'un à partir d'un <b>node</b> en tant que racine d'un

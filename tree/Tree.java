@@ -33,23 +33,23 @@ public class Tree {
 
         Node rootNode1 = new Node(1, null, board, depth);
         Node rootNode2 = new Node(-1, null, board.copy(),depth);
-        System.out.println("Minimax(MAX) : " + new Minimax(1).run(rootNode1, depth));
-        System.out.println("Minimax(MIN) : " + new Minimax(-1).run(rootNode2, depth));
+        System.out.println("Minimax(MAX) : " + new Minimax(1,"Minimax(MAX)").run(rootNode1, depth));
+        System.out.println("Minimax(MIN) : " + new Minimax(-1,"Minimax(MIN)").run(rootNode2, depth));
 
         rootNode1 = new Node(1, null, board, depth);
         rootNode2 = new Node(-1, null, board.copy(), depth);
-        System.out.println("Negamax(MAX) : " + new Negamax(1).run(rootNode1, depth));
-        System.out.println("Negamax(MIN) : " + new Negamax(-1).run(rootNode2, depth));
+        System.out.println("Negamax(MAX) : " + new Negamax(1,"Negamax(MAX)").run(rootNode1, depth));
+        System.out.println("Negamax(MIN) : " + new Negamax(-1,"Negamax(MIN)").run(rootNode2, depth));
 
         rootNode1 = new Node(1, null, board, depth);
         rootNode2 = new Node(-1, null, board.copy(), depth);
-        System.out.println("AlphaBeta(MAX) : " + new Alphabeta(1).run(rootNode1, depth));
-        System.out.println("AlphaBeta(MIN) : " + new Alphabeta(-1).run(rootNode2, depth));
+        System.out.println("AlphaBeta(MAX) : " + new Alphabeta(1,"AlphaBeta(MAX)").run(rootNode1, depth));
+        System.out.println("AlphaBeta(MIN) : " + new Alphabeta(-1,"AlphaBeta(MIN)").run(rootNode2, depth));
 
         rootNode1 = new Node(1, null, board, depth);
         rootNode2 = new Node(-1, null, board.copy(), depth);
-        System.out.println("SSS*(MAX) : " + new SSSstar().run(rootNode1, depth));
-        System.out.println("SSS*(MIN) : " + new SSSstar().run(rootNode2, depth));
+        System.out.println("SSS*(MAX) : " + new SSSstar(1,"SSS*(MAX)").run(rootNode1, depth));
+        System.out.println("SSS*(MIN) : " + new SSSstar(-1,"SSS*(MIN)").run(rootNode2, depth));
 
 
 //        System.out.println("Test priorityQueue :");

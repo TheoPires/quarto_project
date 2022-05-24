@@ -6,6 +6,7 @@ import IA.Minimax;
 import IA.Negamax;
 import controller.QuartoController;
 import model.Player;
+import model.StdPlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +21,7 @@ public class QuartoView {
     private BoardPanel boardPanel;
     private InfoPanel infoPanel;
     private PieceListPanel piecePanel;
-    private JTextArea txtGameMsg;
+    private int level;
 
     private PlayerLabel[] players = new PlayerLabel[2];
     private PlayerLabel currentPlayer;
@@ -28,16 +29,23 @@ public class QuartoView {
     /**
      * Initializes all the components of the GUI and puts them into a JFrame to display.
      */
-    public QuartoView(QuartoController controller)
+    public QuartoView(QuartoController controller, int level)
     {
         this.controller = controller;
+        this.level = level;
         this.mainFrame = new JFrame("Quarto !");
+
         mainFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         mainFrame.setLayout(new BorderLayout());
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        mainFrame.setSize(screenSize.width, screenSize.height);
 
         setupPlayerPanel();
         mainFrame.add(this.playersPanel,BorderLayout.SOUTH);
         init();
+        mainFrame.pack();
+        mainFrame.setVisible(true);
+        mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
     }
     public void init(){
         setupBoardPanel();
@@ -53,27 +61,25 @@ public class QuartoView {
         mainFrame.setVisible(true);
     }
 
-    public void newGame(){
-        mainFrame.remove(this.boardPanel);
-        mainFrame.remove(this.infoPanel);
-        mainFrame.remove(this.piecePanel);
-        mainFrame.remove(this.gameMsgPanel);
-        init();
-    }
-    private void initCPUs()
+    private void initPlayers()
     {
-
-        if (players[0].getName().toUpperCase().startsWith("IA") || players[0].getName().length() == 0 ) {
-            Player[] modes = {new Minimax(1),new Negamax(1), new Alphabeta(1)};
-            Player iaPlayer = (Player) JOptionPane.showInputDialog(null, "Choose the difficulty of " + players[0].getName(),
-                    "IA difficulty selection", JOptionPane.QUESTION_MESSAGE, null, modes, modes[0]);
-            controller.setPlayer(iaPlayer);
+        if (players[0].getName().length() == 0 || players[0].getName().toUpperCase().startsWith("IA") ) {
+            String name = (players[1].getName().length()> 0)?players[1].getName():"IA0";
+            Player[] modes = {new Minimax(1,name),new Negamax(1, name), new Alphabeta(1, name)};
+            Player iaPlayer = (Player) JOptionPane.showInputDialog(null, "Choisir le type d'IA du joueur " + players[0].getName(),
+                    "Type de l'IA", JOptionPane.QUESTION_MESSAGE, null, modes, modes[0]);
+            controller.setPlayer(iaPlayer,0);
+        }else{
+            controller.setPlayer(new StdPlayer(players[0].getName()),0);
         }
-        if (players[1].getName().toUpperCase().startsWith("IA") || players[1].getName().length() == 0) {
-            Player[] modes = {new Minimax(-1),new Negamax(-1), new Alphabeta(-1)};
-            Player iaPlayer = (Player) JOptionPane.showInputDialog(null, "Choose the difficulty of " + players[1].getName(),
-                    "IA difficulty selection", JOptionPane.QUESTION_MESSAGE, null, modes, modes[0]);
-            controller.setPlayer(iaPlayer);
+        if (players[1].getName().length() == 0 || players[1].getName().toUpperCase().startsWith("IA")) {
+            String name = (players[1].getName().length()> 0)?players[1].getName():"IA1";
+            Player[] modes = {new Minimax(-1, name),new Negamax(-1, name), new Alphabeta(-1, name)};
+            Player iaPlayer = (Player) JOptionPane.showInputDialog(null, "Choisir le type d'IA du joueur " + name,
+                    "Type de l'IA", JOptionPane.QUESTION_MESSAGE, null, modes, modes[0]);
+            controller.setPlayer(iaPlayer,1);
+        }else{
+            controller.setPlayer(new StdPlayer(players[1].getName()),1);
         }
     }
 
@@ -82,7 +88,7 @@ public class QuartoView {
         currentPlayer = players[0];
 
         players[1] = new PlayerLabel(1);
-        initCPUs();
+        initPlayers();
         this.playersPanel = new JPanel();
         this.playersPanel.setLayout(new GridLayout(1,2));
         this.playersPanel.add(players[0]);
@@ -92,10 +98,10 @@ public class QuartoView {
         this.boardPanel = new BoardPanel(controller.getSizes(),controller,this);
     }
     private void setupInfoPanel(){
-        this.infoPanel = new InfoPanel(controller);
+        this.infoPanel = new InfoPanel(controller, level);
     }
     private void setupFreePieceList(){
-        piecePanel = new PieceListPanel(controller.getPieces(),controller,this);
+        piecePanel = new PieceListPanel(controller.getPieces(),controller);
     }
     private void setupGameTxt(){ gameMsgPanel = new GameMsgPanel(controller);}
 
@@ -103,23 +109,41 @@ public class QuartoView {
         infoPanel.updateSelectedPiece(namePiece);
     }
     public void refresh(){
+        updateSelectedPiece(controller.getSelectedPieceName());
         this.boardPanel.refreshBoard();
+        this.piecePanel.refreshPieces();
 
         this.playersPanel.revalidate();
         this.boardPanel.revalidate();
         this.infoPanel.revalidate();
         this.gameMsgPanel.revalidate();
+        this.piecePanel.revalidate();
 
         this.playersPanel.repaint();
         this.boardPanel.repaint();
         this.infoPanel.repaint();
         this.gameMsgPanel.repaint();
+        this.piecePanel.repaint();
 
     }
 
+    public static int initLevel(){
+        Integer[] levels = {1,2,3,4};
+        Integer level = (int) JOptionPane.showInputDialog(null, "Choisir le niveau du jeu :",
+                "Choix du niveau", JOptionPane.QUESTION_MESSAGE, null, levels, levels[0]);
+        return level;
+    }
     public void endGame(){
         JOptionPane.showMessageDialog(new JPanel(),
-                    "Fin de la partie.");
+                    "Fin de la partie. Le Gagnant est "+ controller.getCurrentPlayerName());
+        if (JOptionPane.showConfirmDialog(null, "Voulez-vous recommencer une partie ?", "WARNING",
+                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            mainFrame.dispose();
+            controller.newGame();
+
+        }else{
+            gameMsgPanel.setEndMsg();
+        }
 
     }
 

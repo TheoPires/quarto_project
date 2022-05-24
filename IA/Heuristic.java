@@ -1,15 +1,12 @@
 package IA;
 
-import model.Board;
-import model.Couple;
-import model.Move;
-import model.Piece;
+import model.*;
 
 import java.util.*;
 
 public class Heuristic {
 
-    public static Move calculateBestMove(Board board, Piece piece) {
+    public static BestMove calculateBestMove(Board board, Piece piece) {
         List<Couple> listMove = board.getEmptyCell();
         List<Move> listBestMove = new ArrayList<>();
         int bestWeight = 0;
@@ -24,7 +21,8 @@ public class Heuristic {
             }
         }
         Random r = new Random();
-        return listBestMove.get(r.nextInt(listBestMove.size()));
+        Move m = listBestMove.get(r.nextInt(listBestMove.size()));
+        return new BestMove(m,bestWeight);
     }
 
     public static int calulateWeight(Board board, Couple couple, Piece piece) {
