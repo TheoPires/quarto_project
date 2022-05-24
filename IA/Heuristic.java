@@ -6,12 +6,12 @@ import java.util.*;
 
 public class Heuristic {
 
-    public static BestMove calculateBestMove(Board board, Piece piece) {
+    public static BestMove calculateBestMove(Board board, Piece piece, int level) {
         List<Couple> listMove = board.getEmptyCell();
         List<Move> listBestMove = new ArrayList<>();
         int bestWeight = 0;
         for (Couple c : listMove) {
-            int moveWeight = calulateWeight(board, c,piece);
+            int moveWeight = calulateWeight(board, c,piece, level);
             if (moveWeight > bestWeight) {
                listBestMove.clear();
                listBestMove.add(new Move(c.getX(),c.getY(),piece));
@@ -25,12 +25,28 @@ public class Heuristic {
         return new BestMove(m,bestWeight);
     }
 
-    public static int calulateWeight(Board board, Couple couple, Piece piece) {
+    public static int calulateWeight(Board board, Couple couple, Piece piece, int level) {
         int result = 0;
-        result += getOpenRowFromEmplacement(board, couple.getX(), piece);
-        result += getOpenColumnFromEmplacement(board, couple.getY(), piece);
-        result += getOpenDiagonalLeftToRight(board, couple.getX(), couple.getY(), piece);
-        result += getOpenDiagonalRightToLeft(board, couple.getX(), couple.getY(), piece);
+        switch (level){
+            case 1 -> result += heuristicLVL1(board, couple.getX(), couple.getY(),piece);
+            case 2 -> {
+                result += heuristicLVL1(board, couple.getX(), couple.getY(),piece);
+                result += heuristicLVL2(board, couple.getX(), couple.getY(),piece);
+            }
+            case 3 -> {
+                result += heuristicLVL1(board, couple.getX(), couple.getY(),piece);
+                result += heuristicLVL2(board, couple.getX(), couple.getY(),piece);
+                result += heuristicLVL3(board, couple.getX(), couple.getY(),piece);
+            }
+            case 4 -> {
+                result += heuristicLVL1(board, couple.getX(), couple.getY(),piece);
+                result += heuristicLVL2(board, couple.getX(), couple.getY(),piece);
+                result += heuristicLVL3(board, couple.getX(), couple.getY(),piece);
+                result += heuristicLVL4(board, couple.getX(), couple.getY(),piece);
+            }
+            default -> {
+            }
+        }
         return result;
     }
 
@@ -76,6 +92,15 @@ public class Heuristic {
         return result;
     }
 
+    public static int heuristicLVL1(Board board, int row, int column, Piece piece){
+        int result = 0;
+        result += getOpenRowFromEmplacement(board, row, piece);
+        result += getOpenColumnFromEmplacement(board, column, piece);
+        result += getOpenDiagonalLeftToRight(board, row, column, piece);
+        result += getOpenDiagonalRightToLeft(board, row, column, piece);
+        return result;
+    }
+
     public static int heuristicLVL2(Board board, int row, int column, Piece testedPiece) {
         List<Couple> allPossibilities = new ArrayList<>();
         allPossibilities.add(new Couple(0,0));
@@ -87,7 +112,6 @@ public class Heuristic {
         allPossibilities.add(new Couple(-1,-1));
         allPossibilities.add(new Couple(-1,1));
         allPossibilities.add(new Couple(1,-1));
-        System.out.println("allPossibilities : " + allPossibilities);
         return calculHeuristic(board,row,column,testedPiece,allPossibilities);
     }
 
@@ -102,7 +126,6 @@ public class Heuristic {
         allPossibilities.add(new Couple(-2,-2));
         allPossibilities.add(new Couple(-2,2));
         allPossibilities.add(new Couple(2,-2));
-        System.out.println("allPossibilities : " + allPossibilities);
         return calculHeuristic(board,row,column,testedPiece,allPossibilities);
     }
 
@@ -131,7 +154,6 @@ public class Heuristic {
             return false;
         });
         allPossibilities.removeAll(remove);
-        System.out.println("allPossibilities after remove : " + allPossibilities);
 
         int result = 0;
         for (Couple c : allPossibilities) {

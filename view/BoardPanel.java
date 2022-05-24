@@ -56,7 +56,6 @@ public class BoardPanel extends JPanel {
         for(Move m : controller.getMoves()){
             this.boards[m.getX()][m.getY()].setIcon(
                     new ImageIcon("img/"+m.getPiece().getNameImage()+".png"),m.getPiece().getNameImage());
-            //System.out.println("New image : " +m.getPiece().getNameImage());
         }
     }
 }

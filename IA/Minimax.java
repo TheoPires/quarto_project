@@ -21,17 +21,17 @@ public class Minimax extends Algorithm implements Player {
      * @param node
      * @return la valeur minimax de l'arbre de racine <b>node</b> et de profondeur <b>depth</b>
      */
-    public double run(Node node, int depth){
+    public double run(Node node, int depth, int level){
         Node.init();
-        return minimax(node,depth);
+        return minimax(node,depth,level);
     }
 
-    private double minimax(Node node, final int depth) {
+    private double minimax(Node node, final int depth, int level) {
         node.generateChild();
         //Leaf
         if (depth == 0 || node.isLeaf()) {
             Couple tmp = new Couple(node.getMove().getX(), node.getMove().getY());
-            node.setWeight(Heuristic.calulateWeight(node.getBoard(),tmp,node.getMove().getPiece()));
+            node.setWeight(Heuristic.calulateWeight(node.getBoard(),tmp,node.getMove().getPiece(),level));
             return node.getWeight();
         }
         double val;
@@ -39,14 +39,14 @@ public class Minimax extends Algorithm implements Player {
         if(node.isMax()){
             val = Double.NEGATIVE_INFINITY;
             for(Node n : node.getNodes()) {
-                val = Double.max(val, minimax(n, depth - 1));
+                val = Double.max(val, minimax(n, depth - 1,level));
             }
         }
         //Min
         else{
             val = Double.POSITIVE_INFINITY;
             for(Node n : node.getNodes())
-                val = Double.min(val, minimax(n, depth - 1));
+                val = Double.min(val, minimax(n, depth - 1, level));
 
 
         }

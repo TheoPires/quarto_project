@@ -52,7 +52,6 @@ public class Game {
 
     //Commandes
     public void play(Move move){
-        //System.out.println(move.getPiece()+" "+move.getX()+" "+move.getY());
         controller.refresh();
         board.playMove(move);
         movesPlay.add(move);
@@ -61,7 +60,6 @@ public class Game {
         selectedPiece = null;
         needSelectedPiece = true;
         needPlacePiece = false;
-        System.out.println();
         if(isGameFinish()){
             controller.endGame();
         }else {
@@ -72,7 +70,7 @@ public class Game {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }*/
-                setSelectedPiece(((Algorithm)currentPlayer).selectPiece(board.copy()).getNameImage());
+                setSelectedPiece(((Algorithm)currentPlayer).selectPiece(board.copy(),level).getNameImage());
             }else if(currentPlayer != null)
                 controller.setTxtSelectedPiece();
         }
@@ -84,7 +82,7 @@ public class Game {
         needPlacePiece = false;
         currentPlayer = player0;
         if(currentPlayer instanceof Algorithm)
-            setSelectedPiece(((Algorithm)currentPlayer).selectPiece(board.copy()).getNameImage());
+            setSelectedPiece(((Algorithm)currentPlayer).selectPiece(board.copy(), level).getNameImage());
         else if(currentPlayer != null)
             controller.setTxtSelectedPiece();
     }
@@ -105,7 +103,7 @@ public class Game {
         controller.switchPlayer();
         controller.refresh();
         if(currentPlayer instanceof Algorithm)
-            play(((Algorithm)currentPlayer).play(board.copy(), selectedPiece));
+            play(((Algorithm)currentPlayer).play(board.copy(), selectedPiece, level));
         else if(currentPlayer != null)
             controller.setTxtPlacePiece();
 
@@ -171,7 +169,6 @@ public class Game {
     private boolean isGameFinishLevel2(){
         for(int i = 0; i < board.getSIZE()-1; i++){
             for(int j = 0; j < board.getSIZE()-1; j++){
-                System.out.println("i, j : "+i+", "+j);
                 List<Piece> testPiece = new ArrayList<>();
                 testPiece.add(board.getPiece(i,j));
                 testPiece.add(board.getPiece(i, j+1));
@@ -184,10 +181,10 @@ public class Game {
         }
         return false;
     }
-    
+
     private boolean isGameFinishLevel3(){
-        for(int i = 0; i < board.getSIZE(); i++){
-            for(int j = 0; j < board.getSIZE()-1; j++){
+        for(int i = 0; i < board.getSIZE()-2; i++){
+            for(int j = 0; j < board.getSIZE()-2; j++){
                 List<Piece> testPiece = new ArrayList<>();
                 testPiece.add(board.getPiece(i,j));
                 testPiece.add(board.getPiece(i, j+2));
@@ -253,10 +250,8 @@ public class Game {
             }
         }
             for(int i = 0; i<temp.length;i++){
-                //System.out.print(temp[i]+", ");
                 if(temp[i] == 4) return true;
             }
-        //System.out.println("\n---------------");
         return false;
     }
 }

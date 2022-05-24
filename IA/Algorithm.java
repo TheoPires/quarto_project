@@ -17,9 +17,9 @@ public abstract class Algorithm {
         this.name = name;
     }
 
-    public Move play(Board board, Piece selectedPiece) {
+    public Move play(Board board, Piece selectedPiece, int level) {
         Node n = new Node(who, null, board, DEPTH);
-        double value = run(n,DEPTH);
+        double value = run(n,DEPTH, level);
         Move m = null;
         double mWeight = Double.NEGATIVE_INFINITY;
         for(Node succ : n.getNodes()) {
@@ -35,25 +35,23 @@ public abstract class Algorithm {
                 }
             }
         }
-        System.out.println(m);
         return m;
     }
 
-    public Piece selectPiece(Board board){
+    public Piece selectPiece(Board board, int level){
         if(board.getPieces().size() == 0) return null;
         BestMove m = null;
         for(Piece p : board.getPieces()){
-            BestMove newBestMove = Heuristic.calculateBestMove(board.copy(), p);
+            BestMove newBestMove = Heuristic.calculateBestMove(board.copy(), p, level);
             if(m == null)
                 m = newBestMove;
             else if(newBestMove.getWeight() < m.getWeight())
                 m = newBestMove;
         }
-        System.out.println(m);
         return m.getPiece();
     }
 
-    abstract double run(Node node, int depth);
+    abstract double run(Node node, int depth, int level);
 
     public String getName() {
         return name;

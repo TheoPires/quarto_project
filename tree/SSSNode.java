@@ -143,7 +143,6 @@ public class SSSNode {
      */
     public void generateChild() {
         if(depth > 0) {
-            System.out.println("generate child for : "+number);
             List<Couple> listEmptyCell = boardConfig.getEmptyCell();
             List<Piece> listRemPieces = boardConfig.getPieces();
             for (int i = 0; i < listEmptyCell.size(); i++) {
@@ -152,7 +151,6 @@ public class SSSNode {
                     Move move = new Move(listEmptyCell.get(i).getX(), listEmptyCell.get(i).getY(), listRemPieces.get(j));
                     cloneBoard.playMove(move);
                     SSSNode n = new SSSNode(who * -1, this, cloneBoard, move, depth - 1);
-                    System.out.println("generate node["+depth+"] : "+n+"["+n.getDepth()+"]");
                     this.sssNodes.add(n);
                 }
             }

@@ -21,7 +21,7 @@ public class PieceListPanel extends JPanel {
     public PieceListPanel(List<Piece> lstPiece,QuartoController controller){
         this.controller = controller;
         this.setLayout(new GridLayout(lstPiece.size()/NB_COLOR,NB_COLOR,10,10));
-        this.setBackground(Color.red);
+        this.setBackground(Color.white);
         for(int i = 0; i < lstPiece.size();i++){
             this.add(initSquareButton(lstPiece.get(i).getNameImage()));
         }

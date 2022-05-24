@@ -1,9 +1,6 @@
 package view;
 
-import IA.Algorithm;
-import IA.Alphabeta;
-import IA.Minimax;
-import IA.Negamax;
+import IA.*;
 import controller.QuartoController;
 import model.Player;
 import model.StdPlayer;
@@ -65,7 +62,7 @@ public class QuartoView {
     {
         if (players[0].getName().length() == 0 || players[0].getName().toUpperCase().startsWith("IA") ) {
             String name = (players[1].getName().length()> 0)?players[1].getName():"IA0";
-            Player[] modes = {new Minimax(1,name),new Negamax(1, name), new Alphabeta(1, name)};
+            Player[] modes = {new Minimax(1,name),new Negamax(1, name), new Alphabeta(1, name), new NegAlphaBeta(1,name), new SSSstar(1, name)};
             Player iaPlayer = (Player) JOptionPane.showInputDialog(null, "Choisir le type d'IA du joueur " + players[0].getName(),
                     "Type de l'IA", JOptionPane.QUESTION_MESSAGE, null, modes, modes[0]);
             controller.setPlayer(iaPlayer,0);
@@ -74,7 +71,7 @@ public class QuartoView {
         }
         if (players[1].getName().length() == 0 || players[1].getName().toUpperCase().startsWith("IA")) {
             String name = (players[1].getName().length()> 0)?players[1].getName():"IA1";
-            Player[] modes = {new Minimax(-1, name),new Negamax(-1, name), new Alphabeta(-1, name)};
+            Player[] modes = {new Minimax(-1, name),new Negamax(-1, name), new Alphabeta(-1, name), new NegAlphaBeta(-1,name),new SSSstar(-1, name)};
             Player iaPlayer = (Player) JOptionPane.showInputDialog(null, "Choisir le type d'IA du joueur " + name,
                     "Type de l'IA", JOptionPane.QUESTION_MESSAGE, null, modes, modes[0]);
             controller.setPlayer(iaPlayer,1);
