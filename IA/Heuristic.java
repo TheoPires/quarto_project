@@ -111,16 +111,10 @@ public class Heuristic {
             return 0;
         }
         List<Couple> allPossibilities = new ArrayList<>();
-        allPossibilities.add(new Couple(0,0));
-        allPossibilities.add(new Couple(0,1));
-        allPossibilities.add(new Couple(1,0));
-        allPossibilities.add(new Couple(1,1));
-        allPossibilities.add(new Couple(0,-1));
-        allPossibilities.add(new Couple(-1,0));
         allPossibilities.add(new Couple(-1,-1));
+        allPossibilities.add(new Couple(1,1));
         allPossibilities.add(new Couple(-1,1));
         allPossibilities.add(new Couple(1,-1));
-        System.out.println("allPossibilities : " + allPossibilities);
         return calculHeuristic(board,row,column,testedPiece,allPossibilities);
     }
 
