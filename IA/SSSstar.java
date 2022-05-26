@@ -6,23 +6,54 @@ import tree.SSSNode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class SSSstar extends Algorithm implements Player {
 
     private ArrayList<Entity> priorityQueue;
 
-    private int depth = 1;
-
     public SSSstar(int who, String name) {
         super(who, name);
     }
 
-    public double run(Node node, int depth, int level){
-        SSSNode.init();
-        return sssStar(new SSSNode(node, this.depth), level);
+    public Move play(Board board, Piece selectedPiece, int level) {
+        SSSNode n = new SSSNode(new Node(this.who, null, board, DEPTH),DEPTH);
+        double value = runSSS(n, level);
+        Move m = null;
+        double mWeight = Double.NEGATIVE_INFINITY;
+        List<Move> bestMove = new ArrayList<>();
+        for(SSSNode succ : n.getSSSNodes()) {
+            if(succ.getMove().getPiece().equals(selectedPiece)) {
+                System.out.println(succ+" vs "+selectedPiece);
+                if (m == null) {
+                    m = succ.getMove();
+                    mWeight = succ.getWeight();
+                }else if(succ.getWeight() == value){
+                    bestMove.add(succ.getMove());
+                }else if(succ.getWeight() > mWeight){
+                    bestMove.clear();
+                    m = succ.getMove();
+                    mWeight = succ.getWeight();
+                    bestMove.add(m);
+                }
+            }
+        }
+        Move tmp = (bestMove.size() > 0)?bestMove.get(new Random().nextInt(bestMove.size())):m;
+        return tmp;
     }
 
-    public double sssStar(SSSNode node, int level){
+
+    @Override
+    public double run(Node node, int depth, int level) {
+        return runSSS(new SSSNode(node,depth),level);
+    }
+
+    private double runSSS(SSSNode node, int level){
+        SSSNode.init();
+        return sssStar(node, level);
+    }
+
+    private double sssStar(SSSNode node, int level){
         //Depth in execution
         this.priorityQueue = new ArrayList<>();
         insertEntity(new Entity(node,'v',Double.POSITIVE_INFINITY));
@@ -33,30 +64,34 @@ public class SSSstar extends Algorithm implements Player {
             current.getNode().setExplored();
             if(current != null && current.isALive()) {
                 current.getNode().generateChild();
+                System.out.println(current.getNode().getSSSNodes().size());
                 //ALIVE
                 if(current.getNode().getDepth() == 0 || current.getNode().isLeaf()){
                     //LEAF
                     Couple tmp = new Couple(current.getNode().getMove().getX(), current.getNode().getMove().getY());
-                    int weight = Heuristic.calulateWeight(current.getNode().getBoard(),tmp,current.getNode().getMove().getPiece(), level);
+                    double weight = Heuristic.calulateWeight(current.getNode().getBoard(),tmp,current.getNode().getMove().getPiece(), level);
+                    weight = Double.min(current.getValue(), weight);
                     current.getNode().setWeight(weight);
                     current.setRevolve();
-                    current.setValue(Double.min(current.getValue(), weight));
+                    current.setValue(weight);
                     insertEntity(current);
                 } else {
                     if(current.getNode().isMax()){
                         for(SSSNode succ : current.getNode().getSSSNodes()){
                             insertEntity(new Entity(succ,'v',current.getValue()));
-                            current.getNode().setWeight(current.getValue());
+                            succ.setWeight(current.getValue());
                         }
+                        current.getNode().setWeight(current.getValue());
                     } else {
                         //Insert the first left child not explored
                         for (SSSNode succ : current.getNode().getSSSNodes()) {
                             if (!succ.isExplored()) {
                                 insertEntity(new Entity(succ, 'v', current.getValue()));
-                                current.getNode().setWeight(current.getValue());
+                                succ.setWeight(current.getValue());
                                 break;
                             }
                         }
+                        current.getNode().setWeight(current.getValue());
                     }
                 }
             }else if (current != null){ //current est résolu
@@ -72,7 +107,7 @@ public class SSSstar extends Algorithm implements Player {
                     int currentIndexInParent = brothers.indexOf(current.getNode());
                     //Compare current node if is last child
                     if(currentIndexInParent < brothers.size()-1) { //Not last child
-                        for (int i = currentIndexInParent + 1; i < brothers.size() - 1; i++) {
+                        for (int i = currentIndexInParent + 1; i < brothers.size(); i++) {
                             SSSNode brother = brothers.get(i);
                             if (!brother.isExplored()) {
                                 insertEntity(new Entity(brother, 'v', current.getValue()));
@@ -83,12 +118,12 @@ public class SSSstar extends Algorithm implements Player {
                     } else { //Last child
                         Entity parent = new Entity(current.getNode().getParent(), 'r', current.getValue());
                         insertEntity(parent);
+                        parent.getNode().setWeight(parent.getValue());
                     }
                 }
             }else{
                 throw new RuntimeException("Error get head of PriorityQueue: current is null.");
             }
-
         }while(priorityQueue.size() > 0 && priorityQueue.get(0).getNode().getNumber() != n);
         return current.getValue();
     }

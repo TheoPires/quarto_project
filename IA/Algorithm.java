@@ -10,7 +10,7 @@ public abstract class Algorithm {
 
     final int DEPTH = 2;
     private String name;
-    private int who;
+    protected int who;
 
     Algorithm(int who, String name){
         this.who = who;
@@ -23,6 +23,7 @@ public abstract class Algorithm {
         Move m = null;
         double mWeight = Double.NEGATIVE_INFINITY;
         for(Node succ : n.getNodes()) {
+            System.out.println(succ+" vs "+selectedPiece);
             if(succ.getMove().getPiece().equals(selectedPiece)) {
                 if (m == null) {
                     m = succ.getMove();

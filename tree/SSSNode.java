@@ -159,13 +159,13 @@ public class SSSNode {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder("[" + this.number + "]");
-        if(!isLeaf()) {
+        StringBuilder result = new StringBuilder("[" + this.number + "] ("+weight+")");
+       /* if(!isLeaf()) {
             result.append(" -> {");
             for(SSSNode n : this.sssNodes)
                 result.append(n.toString());
             result.append("} ");
-        }
+        }*/
         return result.toString();
     }
 }
