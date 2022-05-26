@@ -59,15 +59,23 @@ public class SSSstar extends Algorithm implements Player {
         insertEntity(new Entity(node,'v',Double.POSITIVE_INFINITY));
         int n = node.getNumber();
         Entity current;
+        int nbrTours = 0;
         do{
+            nbrTours += 1;
+            System.out.println("nbr tours : " + nbrTours);
+            System.out.println("Before remove : " + priorityQueue);
             current = priorityQueue.remove(0);
+            System.out.println("After remove : " + priorityQueue);
             current.getNode().setExplored();
             if(current != null && current.isALive()) {
                 current.getNode().generateChild();
-                System.out.println(current.getNode().getSSSNodes().size());
+                System.out.println("Noeud courant : " + current);
+                System.out.println("Fils généré : " + current.getNode().getSSSNodes());
+                System.out.println("Nbr de fils : " + current.getNode().getSSSNodes().size());
                 //ALIVE
                 if(current.getNode().getDepth() == 0 || current.getNode().isLeaf()){
                     //LEAF
+                    System.out.println("l.78");
                     Couple tmp = new Couple(current.getNode().getMove().getX(), current.getNode().getMove().getY());
                     double weight = Heuristic.calulateWeight(current.getNode().getBoard(),tmp,current.getNode().getMove().getPiece(), level);
                     weight = Double.min(current.getValue(), weight);
@@ -77,12 +85,17 @@ public class SSSstar extends Algorithm implements Player {
                     insertEntity(current);
                 } else {
                     if(current.getNode().isMax()){
+                        System.out.println("l.87");
+                        System.out.println("before insert all child : " + priorityQueue);
+                        // insert all child of current
                         for(SSSNode succ : current.getNode().getSSSNodes()){
                             insertEntity(new Entity(succ,'v',current.getValue()));
                             succ.setWeight(current.getValue());
                         }
                         current.getNode().setWeight(current.getValue());
+                        System.out.println("after insert all child : " + priorityQueue);
                     } else {
+                        System.out.println("l.96");
                         //Insert the first left child not explored
                         for (SSSNode succ : current.getNode().getSSSNodes()) {
                             if (!succ.isExplored()) {
@@ -124,7 +137,11 @@ public class SSSstar extends Algorithm implements Player {
             }else{
                 throw new RuntimeException("Error get head of PriorityQueue: current is null.");
             }
+            System.out.println("priorityQueue : " + priorityQueue);
         }while(priorityQueue.size() > 0 && priorityQueue.get(0).getNode().getNumber() != n);
+        System.out.println(priorityQueue.size() > 0);
+        System.out.println(priorityQueue.get(0).getNode().getNumber() != n);
+        System.out.println("Stop");
         return current.getValue();
     }
 
